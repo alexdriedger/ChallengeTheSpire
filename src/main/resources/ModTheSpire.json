@@ -1,0 +1,12 @@
+{
+  "modid": "challengethespire",
+  "name": "Challenge The Spire",
+  "author_list": ["alexdriedger"],
+  "description": "Challenges for Slay The Spire",
+  "version": "${project.version}",
+  "sts_version": "${SlayTheSpire.version}",
+  "mts_version": "${ModTheSpire.version}",
+  "dependencies": ["basemod"],
+  "update_json": ""
+}
+
