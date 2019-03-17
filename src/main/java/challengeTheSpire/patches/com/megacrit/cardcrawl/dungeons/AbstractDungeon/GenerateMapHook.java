@@ -80,11 +80,13 @@ public class GenerateMapHook {
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
         addAllElites(map, Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries"));
+        addNode(map, new TreasureRoomBoss());
 
         // Act 2
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
         addAllElites(map, Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing"));
+        addNode(map, new TreasureRoomBoss());
 
         // Act 3
         addNode(map, new ShopRoom());
