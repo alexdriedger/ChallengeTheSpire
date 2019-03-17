@@ -1,5 +1,6 @@
 package challengeTheSpire.patches.com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
+import challengeTheSpire.ChallengeTheSpire;
 import challengeTheSpire.MonsterRoomEliteHunting;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
@@ -10,6 +11,8 @@ import com.megacrit.cardcrawl.map.MapEdge;
 import com.megacrit.cardcrawl.map.MapGenerator;
 import com.megacrit.cardcrawl.map.MapRoomNode;
 import com.megacrit.cardcrawl.rooms.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -87,7 +90,7 @@ public class GenerateMapHook {
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
         addAllElites(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
-        addNode(map, new VictoryRoom(VictoryRoom.EventType.NONE));
+        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
 
         logger.info("Generated the following dungeon map:");
         logger.info(MapGenerator.toString(map, Boolean.valueOf(true)));
