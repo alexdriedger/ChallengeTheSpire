@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +48,8 @@ public class ChallengeTheSpire implements
     private static final String MODNAME = "Challenge The Spire";
     private static final String AUTHOR = "alexdriedger"; // And pretty soon - You!
     private static final String DESCRIPTION = "Challenges for Slay The Spire";
+
+    public static final String ELITE_RUSH_ID = "Elite Rush";
 
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
@@ -104,7 +107,7 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receiveCustomModeMods(List<CustomMod> list) {
-        CustomMod cm = new CustomMod("Elite Rush", "p", false);
+        CustomMod cm = new CustomMod(ELITE_RUSH_ID, "p", true);
         list.add(cm);
     }
 
@@ -112,5 +115,9 @@ public class ChallengeTheSpire implements
     public void receiveEditStrings() {
         BaseMod.loadCustomStringsFile(RunModStrings.class,
                 getModID() + "Resources/localization/eng/ChallengeTheSpire-CustomMod-Strings.json");
+    }
+
+    public static boolean isCustomModActive(String ID) {
+        return CardCrawlGame.trial != null && CardCrawlGame.trial.dailyModIDs().contains(ID);
     }
 }

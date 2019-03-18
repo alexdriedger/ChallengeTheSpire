@@ -24,12 +24,14 @@ public class ProceedButtonHook {
 
         @SpireInsertPatch(rloc = 25)
         public static void Insert(ProceedButton __instance) {
-            logger.debug("Proceed Button clicked at y:" + AbstractDungeon.getCurrMapNode().y);
-            AbstractRoom currentRoom = AbstractDungeon.getCurrRoom();
-            if (currentRoom instanceof MonsterRoomEliteHunting &&
-                    AbstractDungeon.getCurrMapNode().y == AbstractDungeon.map.size() - 2) {
-                logger.debug("Going to Victory Room");
-                goToVictoryRoomOrTheDoor(__instance);
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+                logger.debug("Proceed Button clicked at y:" + AbstractDungeon.getCurrMapNode().y);
+                AbstractRoom currentRoom = AbstractDungeon.getCurrRoom();
+                if (currentRoom instanceof MonsterRoomEliteHunting &&
+                        AbstractDungeon.getCurrMapNode().y == AbstractDungeon.map.size() - 2) {
+                    logger.debug("Going to Victory Room");
+                    goToVictoryRoomOrTheDoor(__instance);
+                }
             }
         }
 
@@ -50,9 +52,12 @@ public class ProceedButtonHook {
 
         @SpireInsertPatch(rloc = 111)
         public static SpireReturn Insert(ProceedButton __instance) {
-            AbstractDungeon.dungeonMapScreen.open(false);
-            __instance.hide();
-            return SpireReturn.Return(null);
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+                AbstractDungeon.dungeonMapScreen.open(false);
+                __instance.hide();
+                return SpireReturn.Return(null);
+            }
+            return SpireReturn.Continue();
         }
 
     }

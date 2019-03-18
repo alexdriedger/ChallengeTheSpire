@@ -26,6 +26,14 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.fadeIn;
 @SpirePatch(clz=AbstractDungeon.class, method="generateMap")
 public class GenerateMapHook {
 
+    public static SpireReturn Prefix() {
+        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            AbstractDungeon.map = generateEliteHuntingMap();
+            return SpireReturn.Return(null);
+        }
+        return SpireReturn.Continue();
+    }
+
     private static final int MAP_CENTER_X = 3;
 
     private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room) {
@@ -51,11 +59,6 @@ public class GenerateMapHook {
 
         map.add(row);
 
-    }
-
-    public static SpireReturn Prefix() {
-        AbstractDungeon.map = generateEliteHuntingMap();
-        return SpireReturn.Return(null);
     }
 
     private static MonsterRoomElite createEliteRoom(String key) {
