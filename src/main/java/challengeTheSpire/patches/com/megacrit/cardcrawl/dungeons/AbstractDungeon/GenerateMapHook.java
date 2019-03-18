@@ -92,7 +92,10 @@ public class GenerateMapHook {
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
         addAllElites(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
+        // Add act 4 elite
+        addNode(map, createEliteRoom("Shield and Spear"));
         addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
+
 
         logger.info("Generated the following dungeon map:");
         logger.info(MapGenerator.toString(map, Boolean.valueOf(true)));
