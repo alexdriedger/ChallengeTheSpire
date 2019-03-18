@@ -7,12 +7,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.megacrit.cardcrawl.localization.RunModStrings;
+import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 
 //TODO: FIRST THINGS FIRST: RENAME YOUR PACKAGE AND ID NAMES FIRST-THING!!!
@@ -35,7 +38,8 @@ import java.nio.charset.StandardCharsets;
 
 @SpireInitializer
 public class ChallengeTheSpire implements
-        PostInitializeSubscriber {
+        AddCustomModeModsSubscriber,
+        EditStringsSubscriber {
     public static final Logger logger = LogManager.getLogger(ChallengeTheSpire.class.getName());
     private static String modID;
 
@@ -99,7 +103,14 @@ public class ChallengeTheSpire implements
     }
 
     @Override
-    public void receivePostInitialize() {
-        logger.info("Post Inisialize Complete!");
+    public void receiveCustomModeMods(List<CustomMod> list) {
+        CustomMod cm = new CustomMod("Elite Rush", "p", false);
+        list.add(cm);
+    }
+
+    @Override
+    public void receiveEditStrings() {
+        BaseMod.loadCustomStringsFile(RunModStrings.class,
+                getModID() + "Resources/localization/eng/ChallengeTheSpire-CustomMod-Strings.json");
     }
 }
