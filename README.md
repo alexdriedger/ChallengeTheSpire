@@ -10,7 +10,7 @@ under active development.
 
 ## Features
 
-### Elite Hunting
+### Elite Rush
 
 - Any Class
 - Start with Black Star, Sling, Preserved Insect, 1000 gold
@@ -68,3 +68,7 @@ under active development.
 
 - Remove unnecessary scores (Boss & Elite Rush)
 - Add score bonus for number of sneaky strikes (Sneaky Strike)
+
+### Custom Victory Message
+
+- Victory message surrounding what type of challenge was completed
