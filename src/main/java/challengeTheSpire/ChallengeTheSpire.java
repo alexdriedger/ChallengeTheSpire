@@ -7,8 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.RunModStrings;
+import com.megacrit.cardcrawl.relics.BlackStar;
+import com.megacrit.cardcrawl.relics.PreservedInsect;
+import com.megacrit.cardcrawl.relics.Sling;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,7 +45,8 @@ import java.util.List;
 @SpireInitializer
 public class ChallengeTheSpire implements
         AddCustomModeModsSubscriber,
-        EditStringsSubscriber {
+        EditStringsSubscriber,
+        PostCreateStartingRelicsSubscriber {
     public static final Logger logger = LogManager.getLogger(ChallengeTheSpire.class.getName());
     private static String modID;
 
@@ -115,6 +121,15 @@ public class ChallengeTheSpire implements
     public void receiveEditStrings() {
         BaseMod.loadCustomStringsFile(RunModStrings.class,
                 getModID() + "Resources/localization/eng/ChallengeTheSpire-CustomMod-Strings.json");
+    }
+
+    @Override
+    public void receivePostCreateStartingRelics(AbstractPlayer.PlayerClass playerClass, ArrayList<String> relics) {
+        if (isCustomModActive(ELITE_RUSH_ID)) {
+            relics.add(BlackStar.ID);
+            relics.add(Sling.ID);
+            relics.add(PreservedInsect.ID);
+        }
     }
 
     public static boolean isCustomModActive(String ID) {

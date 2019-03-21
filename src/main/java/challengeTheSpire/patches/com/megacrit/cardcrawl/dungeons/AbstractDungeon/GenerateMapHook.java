@@ -61,23 +61,17 @@ public class GenerateMapHook {
 
     }
 
-    private static MonsterRoomElite createEliteRoom(String key) {
-        MonsterRoomElite room = new MonsterRoomEliteHunting(key);
-        room.setMonster(MonsterHelper.getEncounter(key));
-        return room;
-    }
-
     private static void addAllElites(ArrayList<ArrayList<MapRoomNode>> map, List<String> keys) {
         Collections.shuffle(keys);
         for (String elite : keys) {
-            addNode(map, createEliteRoom(elite));
+            addNode(map, new MonsterRoomEliteHunting(elite));
         }
     }
 
     private static ArrayList<ArrayList<MapRoomNode>> generateEliteHuntingMap() {
         long startTime = System.currentTimeMillis();
 
-        ArrayList<ArrayList<MapRoomNode>> map = new ArrayList();
+        ArrayList<ArrayList<MapRoomNode>> map = new ArrayList<>();
 
         // Act 1
         addNode(map, new ShopRoom());
@@ -96,7 +90,7 @@ public class GenerateMapHook {
         addNode(map, new RestRoom());
         addAllElites(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
         // Add act 4 elite
-        addNode(map, createEliteRoom("Shield and Spear"));
+        addNode(map, new MonsterRoomEliteHunting("Shield and Spear"));
         addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
 
 
