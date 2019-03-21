@@ -30,7 +30,6 @@ under active development.
 
 ### Polish Elite Rush
 
-- Fix trailing edge on final map node
 - Difficulty scaling
   - Silver makes it Ascension 10
   - Gold makes the last elite of each “act” a super elite and Ascension 15

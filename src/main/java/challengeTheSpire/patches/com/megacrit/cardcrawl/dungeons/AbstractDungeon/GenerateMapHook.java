@@ -36,7 +36,7 @@ public class GenerateMapHook {
 
     private static final int MAP_CENTER_X = 3;
 
-    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room) {
+    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room, boolean isFinalNode) {
         // Create node
         int nodeHeight = map.size();
         MapRoomNode node = new MapRoomNode(MAP_CENTER_X, nodeHeight);
@@ -54,11 +54,15 @@ public class GenerateMapHook {
 
         // Connect node with previous node if it exists
         if (nodeHeight > 0) {
-            connectNode(map.get(nodeHeight - 1).get(MAP_CENTER_X), node);
+            connectNode(map.get(nodeHeight - 1).get(MAP_CENTER_X), node, isFinalNode);
         }
 
         map.add(row);
 
+    }
+
+    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room) {
+        addNode(map, room, false);
     }
 
     private static void addAllElites(ArrayList<ArrayList<MapRoomNode>> map, List<String> keys) {
@@ -91,7 +95,7 @@ public class GenerateMapHook {
         addAllElites(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
         // Add act 4 elite
         addNode(map, new MonsterRoomEliteHunting("Shield and Spear"));
-        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
+        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART), true);
 
 
         logger.info("Generated the following dungeon map:");
@@ -103,7 +107,11 @@ public class GenerateMapHook {
         return map;
     }
 
-    private static void connectNode(MapRoomNode src, MapRoomNode dst) {
-        src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, dst.x, dst.y, dst.offsetX, dst.offsetY, false));
+    private static void connectNode(MapRoomNode src, MapRoomNode dst, boolean isFinalNode) {
+        if (isFinalNode) {
+            src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, src.x, src.y, src.offsetX + .01f, src.offsetY + .01f, false));
+        } else {
+            src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, dst.x, dst.y, dst.offsetX, dst.offsetY, false));
+        }
     }
 }
