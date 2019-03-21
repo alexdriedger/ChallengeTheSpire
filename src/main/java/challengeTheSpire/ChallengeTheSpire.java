@@ -9,6 +9,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.relics.BlackStar;
 import com.megacrit.cardcrawl.relics.PreservedInsect;
@@ -46,7 +47,8 @@ import java.util.List;
 public class ChallengeTheSpire implements
         AddCustomModeModsSubscriber,
         EditStringsSubscriber,
-        PostCreateStartingRelicsSubscriber {
+        PostCreateStartingRelicsSubscriber,
+        PostDungeonInitializeSubscriber {
     public static final Logger logger = LogManager.getLogger(ChallengeTheSpire.class.getName());
     private static String modID;
 
@@ -56,6 +58,7 @@ public class ChallengeTheSpire implements
     private static final String DESCRIPTION = "Challenges for Slay The Spire";
 
     public static final String ELITE_RUSH_ID = "Elite Rush";
+    public static final int ELITE_RUSH_STARTING_GOLD = 1000;
 
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
@@ -129,6 +132,14 @@ public class ChallengeTheSpire implements
             relics.add(BlackStar.ID);
             relics.add(Sling.ID);
             relics.add(PreservedInsect.ID);
+        }
+    }
+
+    @Override
+    public void receivePostDungeonInitialize() {
+        if (isCustomModActive(ELITE_RUSH_ID)) {
+            AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD;
+            AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD;
         }
     }
 
