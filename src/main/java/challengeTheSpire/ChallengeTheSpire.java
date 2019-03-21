@@ -11,9 +11,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.RunModStrings;
-import com.megacrit.cardcrawl.relics.BlackStar;
-import com.megacrit.cardcrawl.relics.PreservedInsect;
-import com.megacrit.cardcrawl.relics.Sling;
+import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -132,6 +130,22 @@ public class ChallengeTheSpire implements
             relics.add(BlackStar.ID);
             relics.add(Sling.ID);
             relics.add(PreservedInsect.ID);
+
+            // No ? Nodes
+            AbstractDungeon.relicsToRemoveOnStart.add(JuzuBracelet.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(TinyChest.ID);
+
+            // Single Path
+            AbstractDungeon.relicsToRemoveOnStart.add(WingBoots.ID);
+
+            // No Bosses
+            AbstractDungeon.relicsToRemoveOnStart.add(Pantograph.ID);
+
+            // No Normal Chests
+            AbstractDungeon.relicsToRemoveOnStart.add(Matryoshka.ID);
+
+            // No Normal Enemies
+            AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
         }
     }
 

@@ -30,13 +30,12 @@ under active development.
 
 ### Polish Elite Rush
 
-- Remove useless relics from pool
-  - Juzu Bracelet, Pantograph, etc.
 - Fix trailing edge on final map node
 - Difficulty scaling
   - Silver makes it Ascension 10
   - Gold makes the last elite of each “act” a super elite and Ascension 15
   - Platinum makes it Ascension 20 and all super elites
+- Remove loot from final elite fight
 
 ### Eggcellent
 
@@ -59,3 +58,14 @@ under active development.
 - Beat the run with as many sneaky strikes in the deck as possible
 - There will always be a sneaky strike in each card reward screen
 - Sneaky Strikes are added to your deck every 7 floors
+
+### Custom Challenge Select Screen
+
+- Additional screen available in addition to Standard, Daily, Custom
+- Character select, Difficulty select, Challenge select
+- Record of highest difficulty achieved for each challenge
+
+### Custom Final Score Modifiers
+
+- Remove unnecessary scores (Boss & Elite Rush)
+- Add score bonus for number of sneaky strikes (Sneaky Strike)
