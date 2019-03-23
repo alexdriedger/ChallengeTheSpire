@@ -2,5 +2,9 @@
   "Elite Rush": {
     "NAME": "Elite Rush",
     "DESCRIPTION": "Only Elites in the spire today"
+  },
+  "Boss Rush": {
+    "NAME": "Boss Rush",
+    "DESCRIPTION": "Only Bosses in the spire today"
   }
 }

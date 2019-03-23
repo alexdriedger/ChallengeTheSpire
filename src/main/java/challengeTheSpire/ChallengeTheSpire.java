@@ -58,6 +58,9 @@ public class ChallengeTheSpire implements
     public static final String ELITE_RUSH_ID = "Elite Rush";
     public static final int ELITE_RUSH_STARTING_GOLD = 1000;
 
+    public static final String BOSS_RUSH_ID = "Boss Rush";
+    public static final int BOSS_RUSH_STARTING_GOLD = 1000;
+
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
 
@@ -114,8 +117,10 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receiveCustomModeMods(List<CustomMod> list) {
-        CustomMod cm = new CustomMod(ELITE_RUSH_ID, "p", true);
-        list.add(cm);
+        CustomMod eliteRush = new CustomMod(ELITE_RUSH_ID, "p", true);
+        CustomMod bossRush = new CustomMod(BOSS_RUSH_ID, "p", true);
+        list.add(eliteRush);
+        list.add(bossRush);
     }
 
     @Override
@@ -147,6 +152,31 @@ public class ChallengeTheSpire implements
             // No Normal Enemies
             AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
         }
+
+        if (isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+            relics.add(Courier.ID);
+            relics.add(MoltenEgg2.ID);
+            relics.add(ToxicEgg2.ID);
+            relics.add(FrozenEgg2.ID);
+
+            // No ? Nodes
+            AbstractDungeon.relicsToRemoveOnStart.add(JuzuBracelet.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(TinyChest.ID);
+
+            // Single Path
+            AbstractDungeon.relicsToRemoveOnStart.add(WingBoots.ID);
+
+            // No Normal Chests
+            AbstractDungeon.relicsToRemoveOnStart.add(Matryoshka.ID);
+
+            // No Normal Enemies
+            AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
+
+            // No Elites
+            AbstractDungeon.relicsToRemoveOnStart.add(BlackStar.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(Sling.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(PreservedInsect.ID);
+        }
     }
 
     @Override
@@ -154,6 +184,11 @@ public class ChallengeTheSpire implements
         if (isCustomModActive(ELITE_RUSH_ID)) {
             AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD;
             AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD;
+        }
+
+        if (isCustomModActive(BOSS_RUSH_ID)) {
+            AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD;
+            AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD;
         }
     }
 

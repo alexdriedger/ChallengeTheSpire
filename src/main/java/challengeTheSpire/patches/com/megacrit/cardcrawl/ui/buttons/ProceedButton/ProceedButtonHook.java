@@ -1,6 +1,7 @@
 package challengeTheSpire.patches.com.megacrit.cardcrawl.ui.buttons.ProceedButton;
 
 import challengeTheSpire.ChallengeTheSpire;
+import challengeTheSpire.MonsterRoomBossRush;
 import challengeTheSpire.MonsterRoomEliteHunting;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
@@ -24,10 +25,10 @@ public class ProceedButtonHook {
 
         @SpireInsertPatch(rloc = 25)
         public static void Insert(ProceedButton __instance) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
-                logger.debug("Proceed Button clicked at y:" + AbstractDungeon.getCurrMapNode().y);
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
                 AbstractRoom currentRoom = AbstractDungeon.getCurrRoom();
-                if (currentRoom instanceof MonsterRoomEliteHunting &&
+                if ((currentRoom instanceof MonsterRoomEliteHunting || currentRoom instanceof MonsterRoomBossRush) &&
                         AbstractDungeon.getCurrMapNode().y == AbstractDungeon.map.size() - 2) {
                     logger.debug("Going to Victory Room");
                     goToVictoryRoomOrTheDoor(__instance);
@@ -52,7 +53,8 @@ public class ProceedButtonHook {
 
         @SpireInsertPatch(rloc = 111)
         public static SpireReturn Insert(ProceedButton __instance) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
                 AbstractDungeon.dungeonMapScreen.open(false);
                 __instance.hide();
                 return SpireReturn.Return(null);

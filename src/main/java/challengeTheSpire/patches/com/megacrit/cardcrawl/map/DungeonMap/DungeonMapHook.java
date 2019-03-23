@@ -12,7 +12,8 @@ public class DungeonMapHook {
     @SpirePatch(clz = DungeonMap.class, method = "renderBossIcon")
     public static class stopBossIconRender {
         public static SpireReturn Prefix() {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -22,7 +23,8 @@ public class DungeonMapHook {
     @SpirePatch(clz = DungeonMap.class, method = SpirePatch.CONSTRUCTOR)
     public static class minimizeBossHitbox {
         public static void Postfix(DungeonMap __instance) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
                 __instance.bossHb = new Hitbox(0, 0);
             }
         }
@@ -35,7 +37,8 @@ public class DungeonMapHook {
         // TO INCLUDE `|| (!ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID))
         @SpireInsertPatch(rloc = 12)
         public static SpireReturn Insert(DungeonMap __instance) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();

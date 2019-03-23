@@ -1,6 +1,7 @@
 package challengeTheSpire.patches.com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 import challengeTheSpire.ChallengeTheSpire;
+import challengeTheSpire.MonsterRoomBossRush;
 import challengeTheSpire.MonsterRoomEliteHunting;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +31,9 @@ public class GenerateMapHook {
     public static SpireReturn Prefix() {
         if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
             AbstractDungeon.map = generateEliteHuntingMap();
+            return SpireReturn.Return(null);
+        } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+            AbstractDungeon.map = generateBossRushMap();
             return SpireReturn.Return(null);
         }
         return SpireReturn.Continue();
@@ -65,10 +70,17 @@ public class GenerateMapHook {
         addNode(map, room, false);
     }
 
-    private static void addAllElites(ArrayList<ArrayList<MapRoomNode>> map, List<String> keys) {
+    private static void addAllMonsterRooms(ArrayList<ArrayList<MapRoomNode>> map, List<String> keys, Class<? extends MonsterRoom> cls) {
         Collections.shuffle(keys);
-        for (String elite : keys) {
-            addNode(map, new MonsterRoomEliteHunting(elite));
+        try {
+            // Get the type of room that is being created
+            Constructor<? extends MonsterRoom> con = cls.getConstructor(String.class);
+            for (String k : keys) {
+                AbstractRoom room = con.newInstance(k);
+                addNode(map, room);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Tried to create a non supported room");
         }
     }
 
@@ -80,21 +92,56 @@ public class GenerateMapHook {
         // Act 1
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllElites(map, Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries"));
+        addAllMonsterRooms(map, Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries"), MonsterRoomEliteHunting.class);
         addNode(map, new TreasureRoomBoss());
 
         // Act 2
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllElites(map, Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing"));
+        addAllMonsterRooms(map, Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing"), MonsterRoomEliteHunting.class);
         addNode(map, new TreasureRoomBoss());
 
         // Act 3
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllElites(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
+        addAllMonsterRooms(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"), MonsterRoomEliteHunting.class);
         // Add act 4 elite
         addNode(map, new MonsterRoomEliteHunting("Shield and Spear"));
+        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART), true);
+
+
+        logger.info("Generated the following dungeon map:");
+        logger.info(MapGenerator.toString(map, Boolean.valueOf(true)));
+        logger.info("Game Seed: " + Settings.seed);
+        logger.info("Map generation time: " + (System.currentTimeMillis() - startTime) + "ms");
+        AbstractDungeon.firstRoomChosen = false;
+        fadeIn();
+        return map;
+    }
+
+    private static ArrayList<ArrayList<MapRoomNode>> generateBossRushMap() {
+        long startTime = System.currentTimeMillis();
+
+        ArrayList<ArrayList<MapRoomNode>> map = new ArrayList<>();
+
+        // Act 1
+        addNode(map, new ShopRoom());
+        addNode(map, new ShopRoom());
+        addAllMonsterRooms(map, Arrays.asList("The Guardian", "Hexaghost", "Slime Boss"), MonsterRoomBossRush.class);
+        addNode(map, new TreasureRoomBoss());
+
+        // Act 2
+        addNode(map, new ShopRoom());
+        addNode(map, new RestRoom());
+        addAllMonsterRooms(map, Arrays.asList("Automaton", "Collector", "Champ"), MonsterRoomBossRush.class);
+        addNode(map, new TreasureRoomBoss());
+
+        // Act 3
+        addNode(map, new ShopRoom());
+        addNode(map, new RestRoom());
+        addAllMonsterRooms(map, Arrays.asList("Awakened One", "Time Eater", "Donu and Deca"), MonsterRoomBossRush.class);
+        // Add act 4 elite
+        addNode(map, new MonsterRoomBossRush("The Heart"));
         addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART), true);
 
 
