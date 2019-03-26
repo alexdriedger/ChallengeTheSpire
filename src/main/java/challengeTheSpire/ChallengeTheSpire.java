@@ -7,8 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.cards.green.SneakyStrike;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.relics.*;
@@ -46,6 +49,7 @@ public class ChallengeTheSpire implements
         AddCustomModeModsSubscriber,
         EditStringsSubscriber,
         PostCreateStartingRelicsSubscriber,
+        PostCreateStartingDeckSubscriber,
         PostDungeonInitializeSubscriber {
     public static final Logger logger = LogManager.getLogger(ChallengeTheSpire.class.getName());
     private static String modID;
@@ -55,11 +59,13 @@ public class ChallengeTheSpire implements
     private static final String AUTHOR = "alexdriedger"; // And pretty soon - You!
     private static final String DESCRIPTION = "Challenges for Slay The Spire";
 
-    public static final String ELITE_RUSH_ID = "Elite Rush";
+    public static final String ELITE_RUSH_ID = "CTS - Elite Rush";
     public static final int ELITE_RUSH_STARTING_GOLD = 1000;
 
-    public static final String BOSS_RUSH_ID = "Boss Rush";
+    public static final String BOSS_RUSH_ID = "CTS - Boss Rush";
     public static final int BOSS_RUSH_STARTING_GOLD = 1000;
+
+    public static final String SNEAKY_STRIKE_ID = "CTS - Sneaky Strike";
 
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
@@ -119,8 +125,10 @@ public class ChallengeTheSpire implements
     public void receiveCustomModeMods(List<CustomMod> list) {
         CustomMod eliteRush = new CustomMod(ELITE_RUSH_ID, "p", true);
         CustomMod bossRush = new CustomMod(BOSS_RUSH_ID, "p", true);
+        CustomMod sneakyStrike = new CustomMod(SNEAKY_STRIKE_ID, "p", true);
         list.add(eliteRush);
         list.add(bossRush);
+        list.add(sneakyStrike);
     }
 
     @Override
@@ -189,6 +197,13 @@ public class ChallengeTheSpire implements
         if (isCustomModActive(BOSS_RUSH_ID)) {
             AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD;
             AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD;
+        }
+    }
+
+    @Override
+    public void receivePostCreateStartingDeck(AbstractPlayer.PlayerClass playerClass, CardGroup cardGroup) {
+        if (isCustomModActive(SNEAKY_STRIKE_ID)) {
+            AbstractDungeon.effectList.add(new com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect(new SneakyStrike(), Settings.WIDTH / 2.0F, Settings.HEIGHT / 2.0F));
         }
     }
 

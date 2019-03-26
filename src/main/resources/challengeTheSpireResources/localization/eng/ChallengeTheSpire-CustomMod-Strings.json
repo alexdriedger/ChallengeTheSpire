@@ -1,10 +1,14 @@
 {
-  "Elite Rush": {
+  "CTS - Elite Rush": {
     "NAME": "Elite Rush",
     "DESCRIPTION": "Only Elites in the spire today"
   },
-  "Boss Rush": {
+  "CTS - Boss Rush": {
     "NAME": "Boss Rush",
     "DESCRIPTION": "Only Bosses in the spire today"
+  },
+  "CTS - Sneaky Strike": {
+    "NAME": "Sneaky Strike",
+    "DESCRIPTION": "Inspired by Twitch Chat. Sneaky Strikes added to your deck periodically"
   }
 }
