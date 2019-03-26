@@ -1,7 +1,8 @@
 # Challenge The Spire
 
 Boss Rush, Elite Rush, & more!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.
-This mod is currently under active development.
+
+Challenges can be started from a Custom Run.
 
 ## Requirements
 
@@ -23,6 +24,13 @@ This mod is currently under active development.
 - Start with Black Star, Sling, Preserved Insect, 1000 gold
 - Map is a single path
   - Shop, Fire, All 3 Act 1 Elites, etc.
+  
+### Sneaky Strike
+
+- Silent
+- Beat the run with as many sneaky strikes in the deck as possible
+- There will be a sneaky strike in every card reward screen
+- Free Sneaky Strikes are added to your deck at the middle treasure room and the campfire before the boss in every act
 
 ## Roadmap 
 
@@ -40,6 +48,11 @@ This mod is currently under active development.
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
 
+### Polish Sneaky Strike
+
+- Score bonus for number of sneaky strikes (In addition to collector bonus)
+- Enforce Silent only
+
 ### Eggcellent
 
 - Any Class
@@ -54,14 +67,6 @@ This mod is currently under active development.
 - Ironclad
 - Start with Dead Branch and 0 cost Corruption in starting hand
 - Max hp is limited to 10 (no feed, max hp events, or health relics in pool)
-
-### Sneaky Strike
-
-- Silent
-- Beat the run with as many sneaky strikes in the deck as possible
-- There will always be a sneaky strike in each card reward screen
-- Sneaky Strikes are added to your deck every 7 floors
-- Score bonus for number of sneaky strikes
 
 ### Custom Challenge Select Screen
 
