@@ -1,6 +1,6 @@
 # Challenge The Spire
 
-Boss Rush, Elite Rush, & more!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.
+Boss Rush, Elite Rush, & More!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.
 
 Challenges can be started from a Custom Run.
 
@@ -28,9 +28,10 @@ Challenges can be started from a Custom Run.
 ### Sneaky Strike
 
 - Silent
+- Inspired by Twitch chats everywhere
 - Beat the run with as many sneaky strikes in the deck as possible
 - There will be a sneaky strike in every card reward screen
-- Free Sneaky Strikes are added to your deck at the middle treasure room and the campfire before the boss in every act
+- Sneaky Strikes are added to your deck at the middle treasure room and the campfire before the boss in every act
 
 ## Roadmap 
 
@@ -50,8 +51,8 @@ Challenges can be started from a Custom Run.
 
 ### Polish Sneaky Strike
 
+- Add neow bonus as a choice of discard relics (tough bandages, tingsha, gambling chip)
 - Score bonus for number of sneaky strikes (In addition to collector bonus)
-- Enforce Silent only
 
 ### Eggcellent
 

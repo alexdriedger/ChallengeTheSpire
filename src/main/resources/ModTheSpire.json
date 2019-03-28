@@ -2,7 +2,7 @@
   "modid": "challengethespire",
   "name": "Challenge The Spire",
   "author_list": ["alexdriedger"],
-  "description": "Challenges for Slay The Spire",
+  "description": "Boss Rush, Elite Rush, & More!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.\n\nChallenges can be started from a Custom Run.",
   "version": "${project.version}",
   "sts_version": "${SlayTheSpire.version}",
   "mts_version": "${ModTheSpire.version}",
