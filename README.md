@@ -1,8 +1,8 @@
 # Challenge The Spire
 
-Boss Rush, Elite Rush, & More!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.
+Boss Rush, Elite Rush, & More!! Available on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1696570507)!
 
-Challenges can be started from a Custom Run.
+Challenge The Spire adds a variety of challenge modes to Slay The Spire. Challenges can be started from a Custom Run.
 
 ## Requirements
 
@@ -38,16 +38,19 @@ Challenges can be started from a Custom Run.
 ### Polish Boss Rush & Elite Rush
 
 - Difficulty scaling (Elite Rush)
-  - Silver =  Ascension 10
-  - Gold = The last elite of each “act” a super elite and Ascension 15
+  - Silver =  Ascension 9
+  - Gold = The last elite of each “act” a super elite and Ascension 14 & less starting gold (1000 -> 750)
   - Platinum = Ascension 20 and all super elites
 - Difficulty scaling (Boss Rush)
-  - Silver = Asc 10
-  - Gold = Asc 15
+  - Silver = Asc 9
+  - Gold = Asc 14 & less starting gold (1000 -> 750)
   - Platinum = Asc 20
 - Remove loot from final fight
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
+- Fix saving and continuing bugs
+- Compatibility with endless and infinite spire
+- Make pantograph boss relic (Boss Rush)
 
 ### Polish Sneaky Strike
 
