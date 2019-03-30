@@ -45,11 +45,11 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Challen
   - Silver = Asc 9
   - Gold = Asc 14 & less starting gold (1000 -> 750)
   - Platinum = Asc 20
+- Support for endless and infinite spire
 - Remove loot from final fight
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
 - Fix saving and continuing bugs
-- Compatibility with endless and infinite spire
 - Make pantograph boss relic (Boss Rush)
 
 ### Polish Sneaky Strike
@@ -77,3 +77,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Challen
 - Additional screen available in addition to Standard, Daily, Custom
 - Character select, Difficulty select, Challenge select
 - Record of highest difficulty achieved for each challenge
+
+### General Polish
+
+- Add mod icon
