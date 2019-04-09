@@ -5,6 +5,7 @@ import basemod.interfaces.*;
 import challengeTheSpire.util.IDCheckDontTouchPls;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -14,8 +15,10 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.RunModStrings;
+import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
+import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,25 +27,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-
-//TODO: FIRST THINGS FIRST: RENAME YOUR PACKAGE AND ID NAMES FIRST-THING!!!
-// Right click the package (Open the project pane on the left. Folder with black dot on it. The name's at the very top) -> Refactor -> Rename, and name it whatever you wanna call your mod.
-// Scroll down in this file. Change the ID from "challengeTheSpire:" to "yourModName:" or whatever your heart desires (don't use spaces). Dw, you'll see it.
-// In the JSON strings (resources>localization>eng>[all them files] make sure they all go "yourModName:" rather than "challengeTheSpire". You can ctrl+R to replace in 1 file, or ctrl+shift+r to mass replace in specific files/directories (Be careful.).
-// Start with the DefaultCommon cards - they are the most commented cards since I don't feel it's necessary to put identical comments on every card.
-// After you sorta get the hang of how to make cards, check out the card template which will make your life easier
-
-/*
- * With that out of the way:
- * Welcome to this super over-commented Slay the Spire modding base.
- * Use it to make your own mod of any type. - If you want to add any standard in-game content (character,
- * cards, relics), this is a good starting point.
- * It features 1 character with a minimal set of things: 1 card of each type, 1 debuff, couple of relics, etc.
- * If you're new to modding, you basically *need* the BaseMod wiki for whatever you wish to add
- * https://github.com/daviscook477/BaseMod/wiki - work your way through with this base.
- * Feel free to use this in any way you like, of course. MIT licence applies. Happy modding!
- */
 
 @SpireInitializer
 public class ChallengeTheSpire implements
@@ -61,11 +45,21 @@ public class ChallengeTheSpire implements
 
     public static final String ELITE_RUSH_ID = "CTS - Elite Rush";
     public static final int ELITE_RUSH_STARTING_GOLD = 1000;
+    public static final int ELITE_RUSH_STARTING_GOLD_REDUCED = 750;
 
     public static final String BOSS_RUSH_ID = "CTS - Boss Rush";
     public static final int BOSS_RUSH_STARTING_GOLD = 1000;
+    public static final int BOSS_RUSH_STARTING_GOLD_REDUCED = 750;
 
     public static final String SNEAKY_STRIKE_ID = "CTS - Sneaky Strike";
+
+    public static final String BRONZE_DIFFICULTY_ID = "CTS - Bronze Difficulty";
+    public static final String SILVER_DIFFICULTY_ID = "CTS - Silver Difficulty";
+    public static final String GOLD_DIFFICULTY_ID = "CTS - Gold Difficulty";
+    public static final String PLATINUM_DIFFICULTY_ID = "CTS - Platinum Difficulty";
+
+    public static final String CHALLENGE_MENU_PANEL_ID = "CTS - Challenge Panel";
+    public static final String CHALLENGE_MENU_SCREEN_ID = "CTS - Challenge Screen";
 
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
@@ -113,7 +107,6 @@ public class ChallengeTheSpire implements
         }// NO
     }// NO
 
-
     @SuppressWarnings("unused")
     public static void initialize() {
         logger.info("========================= Initializing Challenge The Spire Mod =========================");
@@ -135,6 +128,8 @@ public class ChallengeTheSpire implements
     public void receiveEditStrings() {
         BaseMod.loadCustomStringsFile(RunModStrings.class,
                 getModID() + "Resources/localization/eng/ChallengeTheSpire-CustomMod-Strings.json");
+        BaseMod.loadCustomStringsFile(UIStrings.class,
+                getModID() + "Resources/localization/eng/ChallengeTheSpire-MenuPanel-Strings.json");
     }
 
     @Override
@@ -190,13 +185,23 @@ public class ChallengeTheSpire implements
     @Override
     public void receivePostDungeonInitialize() {
         if (isCustomModActive(ELITE_RUSH_ID)) {
-            AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD;
-            AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD;
+            if (isCustomModActive(GOLD_DIFFICULTY_ID) || isCustomModActive(PLATINUM_DIFFICULTY_ID)) {
+                AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD_REDUCED;
+                AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD_REDUCED;
+            } else {
+                AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD;
+                AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD;
+            }
         }
 
         if (isCustomModActive(BOSS_RUSH_ID)) {
-            AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD;
-            AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD;
+            if (isCustomModActive(GOLD_DIFFICULTY_ID) || isCustomModActive(PLATINUM_DIFFICULTY_ID)) {
+                AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD_REDUCED;
+                AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD_REDUCED;
+            } else {
+                AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD;
+                AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD;
+            }
         }
     }
 
@@ -209,5 +214,9 @@ public class ChallengeTheSpire implements
 
     public static boolean isCustomModActive(String ID) {
         return CardCrawlGame.trial != null && CardCrawlGame.trial.dailyModIDs().contains(ID);
+    }
+
+    public static String getImagePath(String path) {
+        return getModID() + "Resources/images/" + path;
     }
 }

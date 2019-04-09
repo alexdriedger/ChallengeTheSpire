@@ -1,0 +1,16 @@
+{
+  "CTS - Challenge Panel": {
+    "TEXT": [
+      "Challenge",
+      "Boss Rush, Elite Rush, & Sneaky Strike\n\nCan you handle the challenge?"
+    ]
+  },
+  "CTS - Challenge Screen": {
+    "TEXT": [
+      "Challenge Mode",
+      "Character",
+      "Difficulty",
+      "Challenge"
+    ]
+  }
+}

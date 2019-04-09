@@ -7,15 +7,11 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.map.MapEdge;
 import com.megacrit.cardcrawl.map.MapGenerator;
 import com.megacrit.cardcrawl.map.MapRoomNode;
 import com.megacrit.cardcrawl.rooms.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +37,7 @@ public class GenerateMapHook {
 
     private static final int MAP_CENTER_X = 3;
 
-    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room, boolean isFinalNode) {
+    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room) {
         // Create node
         int nodeHeight = map.size();
         MapRoomNode node = new MapRoomNode(MAP_CENTER_X, nodeHeight);
@@ -57,20 +53,12 @@ public class GenerateMapHook {
         row.add(new MapRoomNode(5, nodeHeight));
         row.add(new MapRoomNode(6, nodeHeight));
 
-        // Connect node with previous node if it exists
-        if (nodeHeight > 0) {
-            connectNode(map.get(nodeHeight - 1).get(MAP_CENTER_X), node, isFinalNode);
-        }
-
         map.add(row);
 
     }
 
-    private static void addNode(ArrayList<ArrayList<MapRoomNode>> map, AbstractRoom room) {
-        addNode(map, room, false);
-    }
-
-    private static void addAllMonsterRooms(ArrayList<ArrayList<MapRoomNode>> map, List<String> keys, Class<? extends MonsterRoom> cls) {
+    private static ArrayList<ArrayList<MapRoomNode>> generateMonsterRooms(List<String> keys, Class<? extends MonsterRoom> cls) {
+        ArrayList<ArrayList<MapRoomNode>> map = new ArrayList<>();
         Collections.shuffle(keys);
         try {
             // Get the type of room that is being created
@@ -82,6 +70,26 @@ public class GenerateMapHook {
         } catch (Exception e) {
             throw new RuntimeException("Tried to create a non supported room");
         }
+
+        return map;
+    }
+
+    private static ArrayList<ArrayList<MapRoomNode>> generateEliteRooms(List<String> keys) {
+        Collections.shuffle(keys);
+        ArrayList<ArrayList<MapRoomNode>> partialMap = generateMonsterRooms(keys, MonsterRoomEliteHunting.class);
+
+        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.GOLD_DIFFICULTY_ID)) {
+            partialMap.get(0).get(MAP_CENTER_X).hasEmeraldKey = true;
+            Collections.shuffle(partialMap);
+        }
+
+        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.PLATINUM_DIFFICULTY_ID)) {
+            for (ArrayList<MapRoomNode> row : partialMap) {
+                row.get(MAP_CENTER_X).hasEmeraldKey = true;
+            }
+        }
+
+        return partialMap;
     }
 
     private static ArrayList<ArrayList<MapRoomNode>> generateEliteHuntingMap() {
@@ -92,23 +100,26 @@ public class GenerateMapHook {
         // Act 1
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllMonsterRooms(map, Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries"), MonsterRoomEliteHunting.class);
+        map.addAll(generateEliteRooms(Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries")));
         addNode(map, new TreasureRoomBoss());
 
         // Act 2
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllMonsterRooms(map, Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing"), MonsterRoomEliteHunting.class);
+        map.addAll(generateEliteRooms(Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing")));
         addNode(map, new TreasureRoomBoss());
 
         // Act 3
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllMonsterRooms(map, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"), MonsterRoomEliteHunting.class);
+        map.addAll(generateEliteRooms(Arrays.asList("Giant Head", "Nemesis", "Reptomancer")));
+
         // Add act 4 elite
         addNode(map, new MonsterRoomEliteHunting("Shield and Spear"));
-        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART), true);
+        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
 
+        adjustNodes(map);
+        connectNodes(map);
 
         logger.info("Generated the following dungeon map:");
         logger.info(MapGenerator.toString(map, Boolean.valueOf(true)));
@@ -127,23 +138,25 @@ public class GenerateMapHook {
         // Act 1
         addNode(map, new ShopRoom());
         addNode(map, new ShopRoom());
-        addAllMonsterRooms(map, Arrays.asList("The Guardian", "Hexaghost", "Slime Boss"), MonsterRoomBossRush.class);
+        map.addAll(generateMonsterRooms(Arrays.asList("The Guardian", "Hexaghost", "Slime Boss"), MonsterRoomBossRush.class));
         addNode(map, new TreasureRoomBoss());
 
         // Act 2
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllMonsterRooms(map, Arrays.asList("Automaton", "Collector", "Champ"), MonsterRoomBossRush.class);
+        map.addAll(generateMonsterRooms(Arrays.asList("Automaton", "Collector", "Champ"), MonsterRoomBossRush.class));
         addNode(map, new TreasureRoomBoss());
 
         // Act 3
         addNode(map, new ShopRoom());
         addNode(map, new RestRoom());
-        addAllMonsterRooms(map, Arrays.asList("Awakened One", "Time Eater", "Donu and Deca"), MonsterRoomBossRush.class);
+        map.addAll(generateMonsterRooms(Arrays.asList("Awakened One", "Time Eater", "Donu and Deca"), MonsterRoomBossRush.class));
         // Add act 4 elite
         addNode(map, new MonsterRoomBossRush("The Heart"));
-        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART), true);
+        addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
 
+        adjustNodes(map);
+        connectNodes(map);
 
         logger.info("Generated the following dungeon map:");
         logger.info(MapGenerator.toString(map, Boolean.valueOf(true)));
@@ -154,11 +167,31 @@ public class GenerateMapHook {
         return map;
     }
 
+    private static void connectNodes(ArrayList<ArrayList<MapRoomNode>> map) {
+        for (int i = 0; i < map.size(); i++) {
+            if (i == 0) {
+                // Nothing to connect to
+            } else if (i == map.size() - 1) {
+                connectNode(map.get(i - 1).get(MAP_CENTER_X), map.get(i).get(MAP_CENTER_X), true);
+            } else {
+                connectNode(map.get(i - 1).get(MAP_CENTER_X), map.get(i).get(MAP_CENTER_X), false);
+            }
+        }
+    }
+
     private static void connectNode(MapRoomNode src, MapRoomNode dst, boolean isFinalNode) {
         if (isFinalNode) {
             src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, src.x, src.y, src.offsetX + .01f, src.offsetY + .01f, false));
         } else {
             src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, dst.x, dst.y, dst.offsetX, dst.offsetY, false));
+        }
+    }
+
+    private static void adjustNodes(ArrayList<ArrayList<MapRoomNode>> map) {
+        for (int i = 0; i < map.size(); i++) {
+            for (MapRoomNode room : map.get(i)) {
+                room.y = i;
+            }
         }
     }
 }
