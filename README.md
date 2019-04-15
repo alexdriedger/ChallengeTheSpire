@@ -18,9 +18,9 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 - Map is a single path
   - Shop, shop, All 3 Act 1 Bosses, etc.
 - Difficulty scaling
-  - Silver = Asc 9
-  - Gold = Asc 14 & less starting gold (1000 -> 750)
-  - Platinum = Asc 20
+  - Silver = Ascension  9
+  - Gold = Ascension  14 & less starting gold (1000 -> 750)
+  - Platinum = Ascension  20
 
 ### Elite Rush
 
@@ -73,6 +73,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 ### Polish Custom Challenge Select Screen
 
 - Record of highest difficulty achieved for each challenge for each character (including modded characters)
+- Select Silent as character when selecting sneaky strike challenge
 
 ### Eggcellent
 
