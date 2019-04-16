@@ -13,10 +13,7 @@ import com.megacrit.cardcrawl.map.MapRoomNode;
 import com.megacrit.cardcrawl.rooms.*;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static basemod.BaseMod.logger;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.fadeIn;
@@ -59,7 +56,7 @@ public class GenerateMapHook {
 
     private static ArrayList<ArrayList<MapRoomNode>> generateMonsterRooms(List<String> keys, Class<? extends MonsterRoom> cls) {
         ArrayList<ArrayList<MapRoomNode>> map = new ArrayList<>();
-        Collections.shuffle(keys);
+        Collections.shuffle(keys, new Random(Settings.seed));
         try {
             // Get the type of room that is being created
             Constructor<? extends MonsterRoom> con = cls.getConstructor(String.class);
@@ -75,12 +72,11 @@ public class GenerateMapHook {
     }
 
     private static ArrayList<ArrayList<MapRoomNode>> generateEliteRooms(List<String> keys) {
-        Collections.shuffle(keys);
         ArrayList<ArrayList<MapRoomNode>> partialMap = generateMonsterRooms(keys, MonsterRoomEliteHunting.class);
 
         if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.GOLD_DIFFICULTY_ID)) {
             partialMap.get(0).get(MAP_CENTER_X).hasEmeraldKey = true;
-            Collections.shuffle(partialMap);
+            Collections.shuffle(partialMap, new Random(Settings.seed));
         }
 
         if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.PLATINUM_DIFFICULTY_ID)) {
@@ -115,7 +111,7 @@ public class GenerateMapHook {
         map.addAll(generateEliteRooms(Arrays.asList("Giant Head", "Nemesis", "Reptomancer")));
 
         // Add act 4 elite
-        addNode(map, new MonsterRoomEliteHunting("Shield and Spear"));
+        map.addAll(generateEliteRooms(Arrays.asList("Shield and Spear")));
         addNode(map, new VictoryRoom(VictoryRoom.EventType.HEART));
 
         adjustNodes(map);

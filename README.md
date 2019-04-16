@@ -57,10 +57,10 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 ### Polish Boss Rush & Elite Rush
 
-- Fix saving and continuing bugs
 - Support for endless and infinite spire
 - Remove loot from final fight
 - Make pantograph boss relic (Boss Rush)
+- Fix soft lock from saving and continuing on a Boss Chest
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
 
@@ -93,3 +93,4 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 ### General Polish
 
 - Add mod icon
+- Add icons for daily mod drop down

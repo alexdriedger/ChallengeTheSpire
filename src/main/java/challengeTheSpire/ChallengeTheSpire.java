@@ -13,7 +13,9 @@ import com.megacrit.cardcrawl.cards.green.SneakyStrike;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.daily.mods.AbstractDailyMod;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.*;
@@ -25,8 +27,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpireInitializer
 public class ChallengeTheSpire implements
@@ -61,11 +62,20 @@ public class ChallengeTheSpire implements
     public static final String CHALLENGE_MENU_PANEL_ID = "CTS - Challenge Panel";
     public static final String CHALLENGE_MENU_SCREEN_ID = "CTS - Challenge Screen";
 
+    public static List<String> CTSmods;
+    public static Map<String, AbstractDailyMod> moddedMods;
+
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
+        initializeCustomMods();
 
         BaseMod.subscribe(this);
         setModID("challengeTheSpire");
+    }
+
+    private static void initializeCustomMods() {
+        CTSmods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID, BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
+        moddedMods = new HashMap<>();
     }
 
     public static void setModID(String ID) { // DON'T EDIT
@@ -213,7 +223,7 @@ public class ChallengeTheSpire implements
     }
 
     public static boolean isCustomModActive(String ID) {
-        return CardCrawlGame.trial != null && CardCrawlGame.trial.dailyModIDs().contains(ID);
+        return (CardCrawlGame.trial != null && CardCrawlGame.trial.dailyModIDs().contains(ID)) || ModHelper.isModEnabled(ID);
     }
 
     public static String getImagePath(String path) {

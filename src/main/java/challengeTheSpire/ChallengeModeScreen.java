@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.SeedHelper;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
@@ -28,6 +29,7 @@ import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static basemod.BaseMod.getModdedCharacters;
@@ -228,10 +230,14 @@ public class ChallengeModeScreen {
 
     private void initializeDifficulties() {
         this.difficulties.clear();
-        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("bronzeSquare.png")), "Bronze", "A good place to get started with new challenges", ChallengeTheSpire.BRONZE_DIFFICULTY_ID));
-        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("silverSquare.png")), "Silver", "Let's turn the heat up a little.", ChallengeTheSpire.SILVER_DIFFICULTY_ID));
-        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("goldSquare.png")), "Gold", "Only for seasoned spire slayers.", ChallengeTheSpire.GOLD_DIFFICULTY_ID));
-        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("platinumSquare.png")), "Platinum", "Welcome to Die. NL Population: You.", ChallengeTheSpire.PLATINUM_DIFFICULTY_ID));
+        RunModStrings rms = CardCrawlGame.languagePack.getRunModString(ChallengeTheSpire.BRONZE_DIFFICULTY_ID);
+        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("bronzeSquare.png")), rms.NAME, rms.DESCRIPTION, ChallengeTheSpire.BRONZE_DIFFICULTY_ID));
+        rms = CardCrawlGame.languagePack.getRunModString(ChallengeTheSpire.SILVER_DIFFICULTY_ID);
+        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("silverSquare.png")), rms.NAME, rms.DESCRIPTION, ChallengeTheSpire.SILVER_DIFFICULTY_ID));
+        rms = CardCrawlGame.languagePack.getRunModString(ChallengeTheSpire.GOLD_DIFFICULTY_ID);
+        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("goldSquare.png")), rms.NAME, rms.DESCRIPTION, ChallengeTheSpire.GOLD_DIFFICULTY_ID));
+        rms = CardCrawlGame.languagePack.getRunModString(ChallengeTheSpire.PLATINUM_DIFFICULTY_ID);
+        this.difficulties.add(new ChallengeModeDifficultyButton(ImageMaster.loadImage(ChallengeTheSpire.getImagePath("platinumSquare.png")), rms.NAME, rms.DESCRIPTION, ChallengeTheSpire.PLATINUM_DIFFICULTY_ID));
         this.difficulties.get(0).hb.clicked = true;
     }
 
