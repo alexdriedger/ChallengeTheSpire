@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.daily.mods.CertainFuture;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.SeedHelper;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -21,9 +22,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeCharacterButton;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
-import com.megacrit.cardcrawl.screens.mainMenu.MainMenuScreen;
-import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
-import com.megacrit.cardcrawl.screens.mainMenu.PatchNotesScreen;
+import com.megacrit.cardcrawl.screens.mainMenu.*;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -36,13 +35,13 @@ import static basemod.BaseMod.getModdedCharacters;
 import static basemod.BaseMod.getPowerKeys;
 import static basemod.BaseMod.logger;
 
-public class ChallengeModeScreen {
+public class ChallengeModeScreen implements ScrollBarListener {
 
     private static final float SHOW_X = 300.0F * Settings.scale;
     private static final int MAX_CHAR_BUTTONS_PER_ROW = 10;
     private float yCharacterAdjust;
     private float screenX = SHOW_X;
-    private float startY = 0.0F;
+    private float startY = -100.0F * Settings.scale;
     private MenuCancelButton cancelButton = new MenuCancelButton();
     public GridSelectConfirmButton confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
     public List<CustomModeCharacterButton> options = new ArrayList<>();
@@ -50,11 +49,70 @@ public class ChallengeModeScreen {
     public List<CustomMod> challenges = new ArrayList<>();
     private UIStrings uiStrings;
 
+    private ScrollBar scrollBar;
+    private float scrollLowerBound;
+    private float scrollUpperBound;
+    private boolean grabbedScreen = false;
+    private float grabStartY = 0.0F; private float targetY = 0.0F; private float scrollY = 0.0F;
+
     public ChallengeModeScreen() {
         initializeCharacters();
         initializeDifficulties();
         initializeChallenges();
         this.uiStrings = CardCrawlGame.languagePack.getUIString(ChallengeTheSpire.CHALLENGE_MENU_SCREEN_ID);
+
+        this.scrollBar = new ScrollBar(this, Settings.WIDTH - 340.0F * Settings.scale - ScrollBar.TRACK_W / 2.0F, Settings.HEIGHT / 2.0F, Settings.HEIGHT - 256.0F * Settings.scale);
+        calculateScrollBounds();
+    }
+
+    private void updateScrolling() {
+        int y = InputHelper.mY;
+
+        if (this.scrollUpperBound > 0.0F) {
+            if (!this.grabbedScreen) {
+                if (InputHelper.scrolledDown) {
+                    this.targetY += Settings.SCROLL_SPEED;
+                } else if (InputHelper.scrolledUp) {
+                    this.targetY -= Settings.SCROLL_SPEED;
+                }
+
+                if (InputHelper.justClickedLeft) {
+                    this.grabbedScreen = true;
+                    this.grabStartY = (y - this.targetY);
+                }
+            } else if (InputHelper.isMouseDown) {
+                this.targetY = (y - this.grabStartY);
+            } else {
+                this.grabbedScreen = false;
+            }
+        }
+
+        this.scrollY = MathHelper.scrollSnapLerpSpeed(this.scrollY, this.targetY);
+
+        if (this.targetY < this.scrollLowerBound) {
+            this.targetY = MathHelper.scrollSnapLerpSpeed(this.targetY, this.scrollLowerBound);
+        } else if (this.targetY > this.scrollUpperBound) {
+            this.targetY = MathHelper.scrollSnapLerpSpeed(this.targetY, this.scrollUpperBound);
+        }
+        updateBarPosition();
+    }
+
+    private void calculateScrollBounds() {
+        this.scrollUpperBound = (this.challenges.size() * 90.0F * Settings.scale + ((float)Math.ceil(this.options.size() / MAX_CHAR_BUTTONS_PER_ROW)) * 100.0F * Settings.scale + 270.0F * Settings.scale);
+        this.scrollLowerBound = (100.0F * Settings.scale);
+    }
+
+    @Override
+    public void scrolledUsingBar(float newPercent) {
+        float newPosition = MathHelper.valueFromPercentBetween(this.scrollLowerBound, this.scrollUpperBound, newPercent);
+        this.scrollY = newPosition;
+        this.targetY = newPosition;
+        updateBarPosition();
+    }
+
+    private void updateBarPosition() {
+        float percent = MathHelper.percentFromValueBetween(this.scrollLowerBound, this.scrollUpperBound, this.scrollY);
+        this.scrollBar.parentScrolledToPercent(percent);
     }
 
     public void open() {
@@ -64,6 +122,10 @@ public class ChallengeModeScreen {
     }
 
     public void update() {
+        boolean isDraggingScrollBar = this.scrollBar.update();
+        if (!isDraggingScrollBar) {
+            updateScrolling();
+        }
         updateCancelButton();
         updateCharacterButtons();
         updateDifficultyButtons();
@@ -88,7 +150,7 @@ public class ChallengeModeScreen {
                 row++;
             }
             float x = this.screenX + (i % MAX_CHAR_BUTTONS_PER_ROW) * 100.0F * Settings.scale + 130.0F * Settings.scale;
-            float y = this.startY + 750.0F * Settings.scale - row * 100 * Settings.scale;
+            float y = this.startY + 750.0F * Settings.scale - row * 100 * Settings.scale + scrollY;
             this.options.get(i).update(x, y);
         }
     }
@@ -96,7 +158,7 @@ public class ChallengeModeScreen {
     private void updateDifficultyButtons() {
         for (int i = 0; i < this.difficulties.size(); i++) {
             float x = this.screenX + i * 100.0F * Settings.scale + 130.0F * Settings.scale;
-            float y = this.startY + 550.0F * Settings.scale - yCharacterAdjust;
+            float y = this.startY + 550.0F * Settings.scale - yCharacterAdjust + scrollY;
             this.difficulties.get(i).update(x, y);
         }
     }
@@ -109,7 +171,7 @@ public class ChallengeModeScreen {
                 this.confirmButton.isDisabled = false;
             }
             float height = (float) ReflectionHacks.getPrivate(chal, CustomMod.class, "height");
-            chal.update(startY + 225.0F * Settings.scale - yCharacterAdjust - height * i);
+            chal.update(startY + 225.0F * Settings.scale - yCharacterAdjust - height * i + scrollY);
         }
     }
 
@@ -180,10 +242,11 @@ public class ChallengeModeScreen {
     }
 
     public void render(SpriteBatch sb) {
-        renderTitle(sb, uiStrings.TEXT[0], startY + 950.0F * Settings.scale);
-        renderHeader(sb, uiStrings.TEXT[1], startY + 850.0F * Settings.scale);
-        renderHeader(sb, uiStrings.TEXT[2], startY + 650.0F * Settings.scale - yCharacterAdjust);
-        renderHeader(sb, uiStrings.TEXT[3], startY + 450.0F * Settings.scale - yCharacterAdjust);
+        this.scrollBar.render(sb);
+        renderTitle(sb, uiStrings.TEXT[0], startY + 950.0F * Settings.scale + this.scrollY);
+        renderHeader(sb, uiStrings.TEXT[1], startY + 850.0F * Settings.scale + this.scrollY);
+        renderHeader(sb, uiStrings.TEXT[2], startY + 650.0F * Settings.scale - yCharacterAdjust + this.scrollY);
+        renderHeader(sb, uiStrings.TEXT[3], startY + 450.0F * Settings.scale - yCharacterAdjust + this.scrollY);
         this.cancelButton.render(sb);
         this.confirmButton.render(sb);
 
