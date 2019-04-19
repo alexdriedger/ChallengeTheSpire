@@ -92,7 +92,8 @@ public class ChallengeTheSpire implements
             modID = EXCEPTION_STRINGS.DEFAULTID; // DON'T
         } else { // NO EDIT AREA
             modID = ID; // DON'T WRITE OR CHANGE THINGS HERE NOT EVEN A LITTLE
-        } // NO
+        }
+        logger.info("Success! ID is " + modID);
     } // NO
 
     public static String getModID() { // NO
