@@ -9,6 +9,7 @@ out/
 .classpath
 .project
 .settings/
+.factorypath
 
 # maven build target
 target/

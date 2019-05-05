@@ -206,12 +206,15 @@ public class ChallengeModeScreen implements ScrollBarListener {
                     AbstractDungeon.ascensionLevel = 0;
                     break;
                 case ChallengeTheSpire.SILVER_DIFFICULTY_ID:
-                    AbstractDungeon.ascensionLevel = 9;
+                    AbstractDungeon.isAscensionMode = true;
+                    AbstractDungeon.ascensionLevel = 10;
                     break;
                 case ChallengeTheSpire.GOLD_DIFFICULTY_ID:
-                    AbstractDungeon.ascensionLevel = 14;
+                    AbstractDungeon.isAscensionMode = true;
+                    AbstractDungeon.ascensionLevel = 15;
                     break;
                 case ChallengeTheSpire.PLATINUM_DIFFICULTY_ID:
+                    AbstractDungeon.isAscensionMode = true;
                     AbstractDungeon.ascensionLevel = 20;
                     break;
                 default:

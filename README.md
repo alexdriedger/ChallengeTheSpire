@@ -57,9 +57,13 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 ### Polish Boss Rush & Elite Rush
 
+- Add large card reward screen
+- Add campfire/shop pathing for more options
 - Support for endless and infinite spire
-- Remove loot from final fight
 - Make pantograph boss relic (Boss Rush)
+- Remove useless relics from Replay The Spire
+- Only start with 2 eggs on Platinum Boss Rush 
+- Remove loot from final fight
 - Fix soft lock from saving and continuing on a Boss Chest
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
