@@ -19,6 +19,7 @@ import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.*;
+import com.megacrit.cardcrawl.rewards.RewardSave;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +36,8 @@ public class ChallengeTheSpire implements
         EditStringsSubscriber,
         PostCreateStartingRelicsSubscriber,
         PostCreateStartingDeckSubscriber,
-        PostDungeonInitializeSubscriber {
+        PostDungeonInitializeSubscriber,
+        PostInitializeSubscriber {
     public static final Logger logger = LogManager.getLogger(ChallengeTheSpire.class.getName());
     private static String modID;
 
@@ -165,6 +167,12 @@ public class ChallengeTheSpire implements
 
             // No Normal Enemies
             AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
+
+            // Custom Card Rewards
+            AbstractDungeon.relicsToRemoveOnStart.add(PrismaticShard.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
         }
 
         if (isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
@@ -190,6 +198,12 @@ public class ChallengeTheSpire implements
             AbstractDungeon.relicsToRemoveOnStart.add(BlackStar.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(Sling.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(PreservedInsect.ID);
+
+            // Custom Card Rewards
+            AbstractDungeon.relicsToRemoveOnStart.add(PrismaticShard.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
         }
     }
 
@@ -221,6 +235,19 @@ public class ChallengeTheSpire implements
         if (isCustomModActive(SNEAKY_STRIKE_ID)) {
             AbstractDungeon.effectList.add(new com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect(new SneakyStrike(), Settings.WIDTH / 2.0F, Settings.HEIGHT / 2.0F));
         }
+    }
+
+    @Override
+    public void receivePostInitialize() {
+        BaseMod.registerCustomReward(
+                RushCardRewardEnum.CTS_LARGE_CARD_REWARD,
+                (rewardSave) -> {
+                    return new LargeCardReward(rewardSave.amount);
+                },
+                (customReward) -> {
+                    return new RewardSave(customReward.type.toString(), null, ((LargeCardReward)customReward).getNumCards(), 0);
+                }
+        );
     }
 
     public static boolean isCustomModActive(String ID) {
