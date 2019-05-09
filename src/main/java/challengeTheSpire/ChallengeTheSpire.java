@@ -64,7 +64,8 @@ public class ChallengeTheSpire implements
     public static final String CHALLENGE_MENU_PANEL_ID = "CTS - Challenge Panel";
     public static final String CHALLENGE_MENU_SCREEN_ID = "CTS - Challenge Screen";
 
-    public static List<String> CTSmods;
+    public static List<String> CTSChallengemods;
+    public static List<String> CTSDifficultymods;
     public static Map<String, AbstractDailyMod> moddedMods;
 
     public ChallengeTheSpire() {
@@ -76,7 +77,8 @@ public class ChallengeTheSpire implements
     }
 
     private static void initializeCustomMods() {
-        CTSmods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID, BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
+        CTSChallengemods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID));
+        CTSDifficultymods = new ArrayList<>(Arrays.asList(BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
         moddedMods = new HashMap<>();
     }
 
@@ -173,6 +175,8 @@ public class ChallengeTheSpire implements
             AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(DreamCatcher.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(TinyHouse.ID);
         }
 
         if (isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
@@ -204,6 +208,8 @@ public class ChallengeTheSpire implements
             AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
             AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(DreamCatcher.ID);
+            AbstractDungeon.relicsToRemoveOnStart.add(TinyHouse.ID);
         }
     }
 
@@ -252,6 +258,28 @@ public class ChallengeTheSpire implements
 
     public static boolean isCustomModActive(String ID) {
         return (CardCrawlGame.trial != null && CardCrawlGame.trial.dailyModIDs().contains(ID)) || ModHelper.isModEnabled(ID);
+    }
+
+    public static String getActiveChallenge() {
+        for (String mod : CTSChallengemods) {
+            if (isCustomModActive(mod)) {
+                logger.debug("active challenge:\t" + mod);
+                return mod;
+            }
+        }
+        logger.error("No active challenge");
+        return null;
+    }
+
+    public static String getActiveDifficulty() {
+        for (String mod : CTSDifficultymods) {
+            if (isCustomModActive(mod)) {
+                logger.debug("active difficulty:\t" + mod);
+                return mod;
+            }
+        }
+        logger.error("No active difficulty");
+        return null;
     }
 
     public static String getImagePath(String path) {

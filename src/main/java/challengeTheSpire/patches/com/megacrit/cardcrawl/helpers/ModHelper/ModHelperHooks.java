@@ -12,10 +12,17 @@ public class ModHelperHooks {
     @SpirePatch(clz = ModHelper.class, method = "initialize")
     public static class InitializeCustomMods {
         public static void Postfix() {
-            for (String mod : ChallengeTheSpire.CTSmods) {
-                RunModStrings modStrings = CardCrawlGame.languagePack.getRunModString(mod);
-                ChallengeTheSpire.moddedMods.put(mod, new AbstractDailyMod(mod, modStrings.NAME, modStrings.DESCRIPTION, "all_star.png", true));
+            for (String mod : ChallengeTheSpire.CTSChallengemods) {
+                initializeMod(mod);
             }
+            for (String mod : ChallengeTheSpire.CTSDifficultymods) {
+                initializeMod(mod);
+            }
+        }
+
+        private static void initializeMod(String mod) {
+            RunModStrings modStrings = CardCrawlGame.languagePack.getRunModString(mod);
+            ChallengeTheSpire.moddedMods.put(mod, new AbstractDailyMod(mod, modStrings.NAME, modStrings.DESCRIPTION, "all_star.png", true));
         }
     }
 

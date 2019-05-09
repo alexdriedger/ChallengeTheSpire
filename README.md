@@ -57,7 +57,6 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 ### Polish Boss Rush & Elite Rush
 
-- Add large card reward screen
 - Add campfire/shop pathing for more options
 - Support for endless and infinite spire
 - Make pantograph boss relic (Boss Rush)

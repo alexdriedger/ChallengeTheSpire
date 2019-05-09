@@ -10,6 +10,9 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.EventStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
+import com.megacrit.cardcrawl.rewards.RewardItem;
+
+import java.util.List;
 
 public class LargeCardReward extends CustomReward {
 
@@ -38,6 +41,47 @@ public class LargeCardReward extends CustomReward {
         super(ICON, TEXT, RushCardRewardEnum.CTS_LARGE_CARD_REWARD);
         this.numCards = group.size();
         this.group = group;
+    }
+
+    public LargeCardReward(String challengeMode, String difficulty) {
+        super(ICON, TEXT, RushCardRewardEnum.CTS_LARGE_CARD_REWARD);
+        if (challengeMode.equals(ChallengeTheSpire.BOSS_RUSH_ID)) {
+            switch (difficulty) {
+                case ChallengeTheSpire.BRONZE_DIFFICULTY_ID:
+                    this.numCards = 20;
+                    break;
+                case ChallengeTheSpire.SILVER_DIFFICULTY_ID:
+                    this.numCards = 15;
+                    break;
+                case ChallengeTheSpire.GOLD_DIFFICULTY_ID:
+                    this.numCards = 15;
+                    break;
+                case ChallengeTheSpire.PLATINUM_DIFFICULTY_ID:
+                    this.numCards = 10;
+                    break;
+                default:
+                    ChallengeTheSpire.logger.error("Unknown difficulty being played in Boss Rush");
+            }
+        }
+        else if (challengeMode.equals(ChallengeTheSpire.ELITE_RUSH_ID)) {
+            switch (difficulty) {
+                case ChallengeTheSpire.BRONZE_DIFFICULTY_ID:
+                    this.numCards = 15;
+                    break;
+                case ChallengeTheSpire.SILVER_DIFFICULTY_ID:
+                    this.numCards = 10;
+                    break;
+                case ChallengeTheSpire.GOLD_DIFFICULTY_ID:
+                    this.numCards = 10;
+                    break;
+                case ChallengeTheSpire.PLATINUM_DIFFICULTY_ID:
+                    this.numCards = 5;
+                    break;
+                default:
+                    ChallengeTheSpire.logger.error("Unknown difficulty being played in Elite Rush");
+            }
+        }
+        this.group = generateCardGroup(numCards);
     }
 
     public int getNumCards() {

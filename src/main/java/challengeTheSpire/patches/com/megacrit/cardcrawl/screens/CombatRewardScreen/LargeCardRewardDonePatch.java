@@ -1,11 +1,12 @@
 package challengeTheSpire.patches.com.megacrit.cardcrawl.screens.CombatRewardScreen;
 
-import challengeTheSpire.ChallengeTheSpire;
-import challengeTheSpire.LargeCardReward;
-import challengeTheSpire.RushCardRewardEnum;
+import challengeTheSpire.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import com.megacrit.cardcrawl.rooms.RestRoom;
+import com.megacrit.cardcrawl.rooms.TreasureRoomBoss;
 import com.megacrit.cardcrawl.screens.CombatRewardScreen;
 
 public class LargeCardRewardDonePatch {
@@ -29,32 +30,13 @@ public class LargeCardRewardDonePatch {
         public static void Insert(CombatRewardScreen __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
                     ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
-                __instance.rewards.removeIf(r -> r.type == RewardItem.RewardType.CARD);
-            }
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
-                if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BRONZE_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(20));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.SILVER_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(15));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.GOLD_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(15));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.PLATINUM_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(10));
-                } else {
-                    ChallengeTheSpire.logger.error("Unknown difficulty being played");
+                if (AbstractDungeon.getCurrRoom() instanceof MonsterRoomEliteHunting ||
+                        AbstractDungeon.getCurrRoom() instanceof MonsterRoomBossRush) {
+                    __instance.rewards.removeIf(r -> r.type == RewardItem.RewardType.CARD);
+                    __instance.rewards.add(new LargeCardReward(ChallengeTheSpire.getActiveChallenge(), ChallengeTheSpire.getActiveDifficulty()));
                 }
-            }
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
-                if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BRONZE_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(15));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.SILVER_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(10));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.GOLD_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(10));
-                } else if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.PLATINUM_DIFFICULTY_ID)) {
-                    __instance.rewards.add(new LargeCardReward(5));
-                } else {
-                    ChallengeTheSpire.logger.error("Unknown difficulty being played");
+                if (AbstractDungeon.getCurrRoom() instanceof TreasureRoomBoss) {
+                    __instance.rewards.removeIf(r -> r.type == RewardItem.RewardType.CARD);
                 }
             }
         }
