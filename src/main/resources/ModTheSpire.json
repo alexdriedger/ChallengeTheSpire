@@ -3,6 +3,7 @@
   "name": "Challenge The Spire",
   "author_list": ["alexdriedger"],
   "description": "Boss Rush, Elite Rush, & Sneaky Strike!! Challenge The Spire adds a variety of challenge modes to Slay The Spire.",
+  "credits": "Rita-B (ZHS Translation), Rhapsody (Featuring CTS on YouTube)",
   "version": "${project.version}",
   "sts_version": "${SlayTheSpire.version}",
   "mts_version": "${ModTheSpire.version}",

@@ -141,10 +141,21 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receiveEditStrings() {
+        String path = getModID() + "Resources/localization/";
+        if (Settings.language.toString().equals("ZHS")) {
+            path += "zhs";
+        } else {
+            // Load English by default
+            path += "eng";
+        }
+        loadStringbyLanguage(path);
+    }
+
+    private static void loadStringbyLanguage(String path) {
         BaseMod.loadCustomStringsFile(RunModStrings.class,
-                getModID() + "Resources/localization/eng/ChallengeTheSpire-CustomMod-Strings.json");
+                path + "/ChallengeTheSpire-CustomMod-Strings.json");
         BaseMod.loadCustomStringsFile(UIStrings.class,
-                getModID() + "Resources/localization/eng/ChallengeTheSpire-MenuPanel-Strings.json");
+                path + "/ChallengeTheSpire-MenuPanel-Strings.json");
     }
 
     @Override
