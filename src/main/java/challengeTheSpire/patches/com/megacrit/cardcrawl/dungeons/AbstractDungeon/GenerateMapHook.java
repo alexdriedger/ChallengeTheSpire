@@ -54,6 +54,37 @@ public class GenerateMapHook {
 
     }
 
+    private static void addNodes(ArrayList<ArrayList<MapRoomNode>> map, List<AbstractRoom> rooms) {
+        Map<Integer, AbstractRoom> positions = new HashMap<>();
+
+        if (rooms.size() > 2 || rooms.size() == 0) {
+            String error = "addNodes called with incorrect number of room. Number of rooms:\t" + rooms.size();
+            ChallengeTheSpire.logger.error(error);
+            throw new RuntimeException(error);
+        } else if (rooms.size() == 1 ) {
+            addNode(map, rooms.get(0));
+        } else if (rooms.size() == 2) {
+            positions.put(2, rooms.get(0));
+            positions.put(4, rooms.get(1));
+        }
+
+        int nodeHeight = map.size();
+        ArrayList<MapRoomNode> row = new ArrayList<>();
+
+        for (int i = 0; i <=6; i++) {
+            if (positions.get(i) != null) {
+                MapRoomNode node = new MapRoomNode(i, nodeHeight);
+                node.room = positions.get(i);
+                row.add(node);
+            } else {
+                row.add(new MapRoomNode(i, nodeHeight));
+            }
+        }
+        map.add(row);
+
+
+    }
+
     private static ArrayList<ArrayList<MapRoomNode>> generateMonsterRooms(List<String> keys, Class<? extends MonsterRoom> cls) {
         ArrayList<ArrayList<MapRoomNode>> map = new ArrayList<>();
         Collections.shuffle(keys, new Random(Settings.seed));
@@ -95,19 +126,19 @@ public class GenerateMapHook {
 
         // Act 1
         addNode(map, new ShopRoom());
-        addNode(map, new RestRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateEliteRooms(Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries")));
         addNode(map, new TreasureRoomBoss());
 
         // Act 2
-        addNode(map, new ShopRoom());
-        addNode(map, new RestRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateEliteRooms(Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing")));
         addNode(map, new TreasureRoomBoss());
 
         // Act 3
-        addNode(map, new ShopRoom());
-        addNode(map, new RestRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateEliteRooms(Arrays.asList("Giant Head", "Nemesis", "Reptomancer")));
 
         // Add act 4 elite
@@ -133,19 +164,19 @@ public class GenerateMapHook {
 
         // Act 1
         addNode(map, new ShopRoom());
-        addNode(map, new ShopRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateMonsterRooms(Arrays.asList("The Guardian", "Hexaghost", "Slime Boss"), MonsterRoomBossRush.class));
         addNode(map, new TreasureRoomBoss());
 
         // Act 2
-        addNode(map, new ShopRoom());
-        addNode(map, new RestRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateMonsterRooms(Arrays.asList("Automaton", "Collector", "Champ"), MonsterRoomBossRush.class));
         addNode(map, new TreasureRoomBoss());
 
         // Act 3
-        addNode(map, new ShopRoom());
-        addNode(map, new RestRoom());
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
+        addNodes(map, Arrays.asList(new ShopRoom(), new RestRoom()));
         map.addAll(generateMonsterRooms(Arrays.asList("Awakened One", "Time Eater", "Donu and Deca"), MonsterRoomBossRush.class));
         // Add act 4 elite
         addNode(map, new MonsterRoomBossRush("The Heart"));
@@ -170,7 +201,18 @@ public class GenerateMapHook {
             } else if (i == map.size() - 1) {
                 connectNode(map.get(i - 1).get(MAP_CENTER_X), map.get(i).get(MAP_CENTER_X), true);
             } else {
-                connectNode(map.get(i - 1).get(MAP_CENTER_X), map.get(i).get(MAP_CENTER_X), false);
+                ArrayList<MapRoomNode> currentRow = map.get(i);
+                ArrayList<MapRoomNode> prevRow = map.get(i - 1);
+
+                for (MapRoomNode currentRowNode : currentRow) {
+                    if (currentRowNode.room != null) {
+                        for (MapRoomNode prevRowNode : prevRow) {
+                            if (prevRowNode.room != null) {
+                                connectNode(prevRowNode, currentRowNode, false);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
