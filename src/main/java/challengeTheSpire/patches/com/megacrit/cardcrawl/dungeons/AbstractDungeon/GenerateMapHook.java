@@ -219,7 +219,7 @@ public class GenerateMapHook {
 
     private static void connectNode(MapRoomNode src, MapRoomNode dst, boolean isFinalNode) {
         if (isFinalNode) {
-            src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, src.x, src.y, src.offsetX + .01f, src.offsetY + .01f, false));
+            src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, dst.x, dst.y, src.offsetX + .01f, src.y * Settings.MAP_DST_Y + src.offsetY - dst.y * Settings.MAP_DST_Y - dst.offsetY + .01f, false));
         } else {
             src.addEdge(new MapEdge(src.x, src.y, src.offsetX, src.offsetY, dst.x, dst.y, dst.offsetX, dst.offsetY, false));
         }
