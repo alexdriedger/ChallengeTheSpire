@@ -203,6 +203,10 @@ public class ChallengeTheSpire implements
             // Single Path
             AbstractDungeon.relicsToRemoveOnStart.add(WingBoots.ID);
 
+            // Necessary to remove relic from its default relic pool
+            // It is added to Boss relic pool in `MakePantographBossRelic` patch
+            AbstractDungeon.relicsToRemoveOnStart.add(Pantograph.ID);
+
             // No Normal Chests
             AbstractDungeon.relicsToRemoveOnStart.add(Matryoshka.ID);
 

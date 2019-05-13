@@ -57,9 +57,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 ### Polish Boss Rush & Elite Rush
 
-- Remove smoke bomb
 - Support for endless and infinite spire
-- Make pantograph boss relic (Boss Rush)
 - Remove useless relics from Replay The Spire, Hubris, Aspiration, Conspire
 - Only start with 2 eggs on Platinum Boss Rush 
 - Remove loot from final fight
@@ -77,6 +75,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 ### Polish Custom Challenge Select Screen
 
 - Record of highest difficulty achieved for each challenge for each character (including modded characters)
+- Hide embark button when unchecking currently checked challenge
 - Select Silent as character when selecting sneaky strike challenge
 
 ### Eggcellent
