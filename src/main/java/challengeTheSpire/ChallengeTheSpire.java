@@ -5,6 +5,7 @@ import basemod.interfaces.*;
 import challengeTheSpire.util.IDCheckDontTouchPls;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
@@ -16,12 +17,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.AbstractDailyMod;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ModHelper;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rewards.RewardSave;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
-import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,9 +69,20 @@ public class ChallengeTheSpire implements
     public static List<String> CTSDifficultymods;
     public static Map<String, AbstractDailyMod> moddedMods;
 
+    private List<String> rushRelicsToRemove;
+    private List<String> eliteRushRelicsToRemove;
+    private List<String> bossRushRelicsToRemove;
+    private List<String> replayRushRelicsToRemove;
+    private List<String> hubrisRushRelicsToRemove;
+    private List<String> conspireRushRelicsToRemove;
+    private List<String> aspirationRushRelicsToRemove;
+    private List<String> halationRushRelicsToRemove;
+    private List<String> jediRushRelicsToRemove;
+
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
         initializeCustomMods();
+        initializeRelicsToRemove();
 
         BaseMod.subscribe(this);
         setModID("challengeTheSpire");
@@ -80,6 +92,95 @@ public class ChallengeTheSpire implements
         CTSChallengemods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID));
         CTSDifficultymods = new ArrayList<>(Arrays.asList(BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
         moddedMods = new HashMap<>();
+    }
+
+    private void initializeRelicsToRemove() {
+        rushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                // No ? Nodes
+                JuzuBracelet.ID,
+                TinyChest.ID,
+
+                // Single Path
+                WingBoots.ID,
+
+                // No Normal Chests
+                Matryoshka.ID,
+
+                // No Normal Enemies
+                PrayerWheel.ID,
+
+                // Custom Card Rewards
+                PrismaticShard.ID,
+                BustedCrown.ID,
+                SingingBowl.ID,
+                QuestionCard.ID,
+                DreamCatcher.ID,
+                TinyHouse.ID
+        ));
+
+        eliteRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                // No Bosses
+                Pantograph.ID
+        ));
+
+        bossRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                // Necessary to remove relic from its default relic pool
+                // It is added to Boss relic pool in `MakePantographBossRelic` patch
+                Pantograph.ID,
+
+                // No Elites
+                BlackStar.ID,
+                Sling.ID,
+                PreservedInsect.ID
+        ));
+
+        replayRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "Golden Egg",
+                "Honey Jar",
+                "Ring of Chaos",
+                "ReplayTheSpireMod:ShopPack",
+                "Replay:Mystery Machine"
+        ));
+
+        hubrisRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "hubris:TenFootPole",
+                "hubris:OldNail",
+                "hubris:DisguiseKit",
+                "hubris:TinFlute",
+                "hubris:64BitClover",
+                "hubris:Teleporter",
+                "hubris:TerracottaHorce"
+        ));
+
+        conspireRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "conspire:Flyswatter",
+                "conspire:TreasureMap"
+        ));
+
+        aspirationRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "aspiration:SeaSaltIceCream",
+                "aspiration:PoetsPen",
+                "aspiration:PoetsPen_weak"
+        ));
+
+        halationRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "halation:LostSnail",
+                "halation:Komachan",
+                "halation:Jellyphish",
+                "halation:LettersToHer",
+                "halation:BlackBeret",
+                "halation:QuantumPhysicsTextbook",
+                "halation:SmartPhone",
+                "halation:Convergence",
+                "halation:Diary",
+                "halation:KoshaPiece",
+                "halation:SelfBoilingWater"
+        ));
+
+        jediRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "jedi:arcanewood",
+                "jedi:shrinkray"
+        ));
     }
 
     public static void setModID(String ID) { // DON'T EDIT
@@ -165,29 +266,7 @@ public class ChallengeTheSpire implements
             relics.add(Sling.ID);
             relics.add(PreservedInsect.ID);
 
-            // No ? Nodes
-            AbstractDungeon.relicsToRemoveOnStart.add(JuzuBracelet.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(TinyChest.ID);
-
-            // Single Path
-            AbstractDungeon.relicsToRemoveOnStart.add(WingBoots.ID);
-
-            // No Bosses
-            AbstractDungeon.relicsToRemoveOnStart.add(Pantograph.ID);
-
-            // No Normal Chests
-            AbstractDungeon.relicsToRemoveOnStart.add(Matryoshka.ID);
-
-            // No Normal Enemies
-            AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
-
-            // Custom Card Rewards
-            AbstractDungeon.relicsToRemoveOnStart.add(PrismaticShard.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(DreamCatcher.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(TinyHouse.ID);
+            AbstractDungeon.relicsToRemoveOnStart.addAll(eliteRushRelicsToRemove);
         }
 
         if (isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
@@ -196,35 +275,25 @@ public class ChallengeTheSpire implements
             relics.add(ToxicEgg2.ID);
             relics.add(FrozenEgg2.ID);
 
-            // No ? Nodes
-            AbstractDungeon.relicsToRemoveOnStart.add(JuzuBracelet.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(TinyChest.ID);
+            AbstractDungeon.relicsToRemoveOnStart.addAll(bossRushRelicsToRemove);
+        }
 
-            // Single Path
-            AbstractDungeon.relicsToRemoveOnStart.add(WingBoots.ID);
+        if (isCustomModActive(ELITE_RUSH_ID) || isCustomModActive(BOSS_RUSH_ID)) {
+            AbstractDungeon.relicsToRemoveOnStart.addAll(rushRelicsToRemove);
 
-            // Necessary to remove relic from its default relic pool
-            // It is added to Boss relic pool in `MakePantographBossRelic` patch
-            AbstractDungeon.relicsToRemoveOnStart.add(Pantograph.ID);
+            removeModRelicsIfLoaded("ReplayTheSpireMod", replayRushRelicsToRemove);
+            removeModRelicsIfLoaded("hubris", hubrisRushRelicsToRemove);
+            removeModRelicsIfLoaded("conspire", conspireRushRelicsToRemove);
+            removeModRelicsIfLoaded("aspiration", aspirationRushRelicsToRemove);
+            removeModRelicsIfLoaded("Halation", halationRushRelicsToRemove);
+            removeModRelicsIfLoaded("jedi", jediRushRelicsToRemove);
+        }
+    }
 
-            // No Normal Chests
-            AbstractDungeon.relicsToRemoveOnStart.add(Matryoshka.ID);
-
-            // No Normal Enemies
-            AbstractDungeon.relicsToRemoveOnStart.add(PrayerWheel.ID);
-
-            // No Elites
-            AbstractDungeon.relicsToRemoveOnStart.add(BlackStar.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(Sling.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(PreservedInsect.ID);
-
-            // Custom Card Rewards
-            AbstractDungeon.relicsToRemoveOnStart.add(PrismaticShard.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(BustedCrown.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(SingingBowl.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(QuestionCard.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(DreamCatcher.ID);
-            AbstractDungeon.relicsToRemoveOnStart.add(TinyHouse.ID);
+    private void removeModRelicsIfLoaded(String ID, List<String> relicsToRemove) {
+        if (Loader.isModLoaded(ID)) {
+            logger.info(ID + " detected! Removing " + relicsToRemove.size() + " useless relics");
+            AbstractDungeon.relicsToRemoveOnStart.addAll(relicsToRemove);
         }
     }
 
@@ -269,6 +338,7 @@ public class ChallengeTheSpire implements
                     return new RewardSave(customReward.type.toString(), null, ((LargeCardReward)customReward).getNumCards(), 0);
                 }
         );
+        RelicLibrary.unlockAndSeeAllRelics();
     }
 
     public static boolean isCustomModActive(String ID) {

@@ -58,7 +58,6 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 ### Polish Boss Rush & Elite Rush
 
 - Support for endless and infinite spire
-- Remove useless relics from Replay The Spire, Hubris, Aspiration, Conspire
 - Only start with 2 eggs on Platinum Boss Rush 
 - Remove loot from final fight
 - Fix soft lock from saving and continuing on a Boss Chest
