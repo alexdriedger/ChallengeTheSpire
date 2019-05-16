@@ -78,6 +78,7 @@ public class ChallengeTheSpire implements
     private List<String> aspirationRushRelicsToRemove;
     private List<String> halationRushRelicsToRemove;
     private List<String> jediRushRelicsToRemove;
+    private List<String> vexRushRelicsToRemove;
 
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
@@ -180,6 +181,19 @@ public class ChallengeTheSpire implements
         jediRushRelicsToRemove = new ArrayList<>(Arrays.asList(
                 "jedi:arcanewood",
                 "jedi:shrinkray"
+        ));
+
+        vexRushRelicsToRemove = new ArrayList<>(Arrays.asList(
+                "vexMod:BetterTron",
+                "vexMod:HeadHunter",
+                "vexMod:PlagueVial",
+                "vexMod:RedPlottingStone",
+                "vexMod:CursedCompass",
+                "vexMod:MallPass",
+                "vexMod:TreasureMap",
+                "vexMod:BrokenBowl",
+                "vexMod:ChompingNoodles",
+                "vexMod:GildedClover"
         ));
     }
 
@@ -287,6 +301,7 @@ public class ChallengeTheSpire implements
             removeModRelicsIfLoaded("aspiration", aspirationRushRelicsToRemove);
             removeModRelicsIfLoaded("Halation", halationRushRelicsToRemove);
             removeModRelicsIfLoaded("jedi", jediRushRelicsToRemove);
+            removeModRelicsIfLoaded("vexMod", vexRushRelicsToRemove);
         }
     }
 
@@ -338,7 +353,6 @@ public class ChallengeTheSpire implements
                     return new RewardSave(customReward.type.toString(), null, ((LargeCardReward)customReward).getNumCards(), 0);
                 }
         );
-        RelicLibrary.unlockAndSeeAllRelics();
     }
 
     public static boolean isCustomModActive(String ID) {
