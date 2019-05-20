@@ -94,5 +94,4 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 ### General Polish
 
-- Add mod icon
 - Add icons for daily mod drop down

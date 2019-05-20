@@ -1,6 +1,7 @@
 package challengeTheSpire;
 
 import basemod.BaseMod;
+import basemod.ModPanel;
 import basemod.interfaces.*;
 import challengeTheSpire.util.IDCheckDontTouchPls;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +17,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.AbstractDailyMod;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.RunModStrings;
@@ -353,6 +355,8 @@ public class ChallengeTheSpire implements
                     return new RewardSave(customReward.type.toString(), null, ((LargeCardReward)customReward).getNumCards(), 0);
                 }
         );
+
+        BaseMod.registerModBadge(ImageMaster.loadImage(getImagePath("modBadge.png")), "Challenge The Spire", "alexdriedger", "Challenge the Spire rocks!", new ModPanel());
     }
 
     public static boolean isCustomModActive(String ID) {
