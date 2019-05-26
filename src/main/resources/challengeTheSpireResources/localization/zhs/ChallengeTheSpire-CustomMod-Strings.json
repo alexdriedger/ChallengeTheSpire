@@ -1,29 +1,29 @@
 {
-  "CTS - Elite Rush": {
+  "challengethespire:Elite Rush": {
     "NAME": "Elite_Rush",
     "DESCRIPTION": "今天高塔里面只有精英。"
   },
-  "CTS - Boss Rush": {
+  "challengethespire:Boss Rush": {
     "NAME": "Boss_Rush",
     "DESCRIPTION": "今天高塔里面只有BOSS。"
   },
-  "CTS - Sneaky Strike": {
+  "challengethespire:Sneaky Strike": {
     "NAME": "隐秘打击",
     "DESCRIPTION": "直播聊天时候得到的灵感。 隐秘打击将会周期性地加入你的牌库。"
   },
-  "CTS - Bronze Difficulty": {
+  "challengethespire:Bronze Difficulty": {
     "NAME": "铜",
     "DESCRIPTION": "一个尝试新的挑战的好选择。"
   },
-  "CTS - Silver Difficulty": {
+  "challengethespire:Silver Difficulty": {
     "NAME": "银",
     "DESCRIPTION": "让暴风雨来的更猛烈些吧！"
   },
-  "CTS - Gold Difficulty": {
+  "challengethespire:Gold Difficulty": {
     "NAME": "金",
     "DESCRIPTION": "只面向于经验丰富的高塔老手的难度。"
   },
-  "CTS - Platinum Difficulty": {
+  "challengethespire:Platinum Difficulty": {
     "NAME": "白金",
     "DESCRIPTION": "笑对死亡。 NL 人口：你。"
   }

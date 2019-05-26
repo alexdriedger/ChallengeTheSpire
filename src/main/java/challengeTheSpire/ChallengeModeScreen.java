@@ -1,13 +1,10 @@
 package challengeTheSpire;
 
-import basemod.BaseMod;
-import basemod.ReflectionHacks;
 import challengeTheSpire.patches.com.megacrit.cardcrawl.screens.custom.CustomModeScreen.CustomModeEmbarkHook;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.daily.mods.CertainFuture;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
@@ -21,19 +18,14 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeCharacterButton;
-import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import com.megacrit.cardcrawl.screens.mainMenu.*;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static basemod.BaseMod.getModdedCharacters;
-import static basemod.BaseMod.getPowerKeys;
-import static basemod.BaseMod.logger;
 
 public class ChallengeModeScreen implements ScrollBarListener {
 
@@ -44,10 +36,29 @@ public class ChallengeModeScreen implements ScrollBarListener {
     private float startY = -100.0F * Settings.scale;
     private MenuCancelButton cancelButton = new MenuCancelButton();
     public GridSelectConfirmButton confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
-    public List<CustomModeCharacterButton> options = new ArrayList<>();
+    public List<CustomModeCharacterButton> characters = new ArrayList<>();
     public List<ChallengeModeDifficultyButton> difficulties = new ArrayList<>();
     public List<CustomMod> challenges = new ArrayList<>();
+    public  List<ChallengeGroup> challengeGroups = new ArrayList<>();
     private UIStrings uiStrings;
+
+    // Titles & headers constants
+    private static final float START_POS_Y_TITLE = 950.0F;
+    private static final float START_POS_Y_CHAR_HEADER = 850.0F;
+    private static final float START_POS_Y_DIFFICULTY_HEADER = 650.0F;
+    private static final float START_POS_Y_CHALLENGE_GROUP_START = 350.0F;
+    public static final float HEADER_PADDING_BOTTOM = 100.0F;
+
+    // Character button constants
+    private static final float CHARACTER_BUTTON_WIDTH = 100.0F;
+    private static final float CHARACTER_BUTTON_PADDING = 130.0F;
+    private static final float CHARACTER_BUTTON_ROW_HEIGHT = 100.0F;
+    private static final float START_POS_Y_CHARACTER_BUTTON_GROUP = START_POS_Y_CHAR_HEADER - HEADER_PADDING_BOTTOM;
+
+    // Difficulty button constants
+    private static final float DIFFICULTY_BUTTON_WIDTH = 100.0F;
+    private static final float DIFFICULTY_BUTTON_PADDING = 130.0F;
+    private static final float START_POS_Y_DIFFICULTY_BUTTON_GROUP = START_POS_Y_DIFFICULTY_HEADER - HEADER_PADDING_BOTTOM;
 
     private ScrollBar scrollBar;
     private float scrollLowerBound;
@@ -56,10 +67,10 @@ public class ChallengeModeScreen implements ScrollBarListener {
     private float grabStartY = 0.0F; private float targetY = 0.0F; private float scrollY = 0.0F;
 
     public ChallengeModeScreen() {
+        this.uiStrings = CardCrawlGame.languagePack.getUIString(ChallengeTheSpire.CHALLENGE_MENU_SCREEN_ID);
         initializeCharacters();
         initializeDifficulties();
         initializeChallenges();
-        this.uiStrings = CardCrawlGame.languagePack.getUIString(ChallengeTheSpire.CHALLENGE_MENU_SCREEN_ID);
 
         this.scrollBar = new ScrollBar(this, Settings.WIDTH - 340.0F * Settings.scale - ScrollBar.TRACK_W / 2.0F, Settings.HEIGHT / 2.0F, Settings.HEIGHT - 256.0F * Settings.scale);
         calculateScrollBounds();
@@ -98,7 +109,12 @@ public class ChallengeModeScreen implements ScrollBarListener {
     }
 
     private void calculateScrollBounds() {
-        this.scrollUpperBound = (this.challenges.size() * 90.0F * Settings.scale + ((float)Math.ceil(this.options.size() / MAX_CHAR_BUTTONS_PER_ROW)) * 100.0F * Settings.scale + 270.0F * Settings.scale);
+        float upperBound = 0.0F;
+        for (ChallengeGroup cg : this.challengeGroups) {
+            upperBound += cg.size();
+            upperBound += HEADER_PADDING_BOTTOM;
+        }
+        this.scrollUpperBound = upperBound + yCharacterAdjust + 270.0F * Settings.scale;
         this.scrollLowerBound = (100.0F * Settings.scale);
     }
 
@@ -145,33 +161,57 @@ public class ChallengeModeScreen implements ScrollBarListener {
 
     private void updateCharacterButtons() {
         int row = 0;
-        for (int i = 0; i < this.options.size(); i++) {
+        for (int i = 0; i < this.characters.size(); i++) {
             if (i % MAX_CHAR_BUTTONS_PER_ROW == 0 && i != 0) {
                 row++;
             }
-            float x = this.screenX + (i % MAX_CHAR_BUTTONS_PER_ROW) * 100.0F * Settings.scale + 130.0F * Settings.scale;
-            float y = this.startY + 750.0F * Settings.scale - row * 100 * Settings.scale + scrollY;
-            this.options.get(i).update(x, y);
+            float x = this.screenX
+                    + (i % MAX_CHAR_BUTTONS_PER_ROW) * CHARACTER_BUTTON_WIDTH * Settings.scale
+                    + CHARACTER_BUTTON_PADDING * Settings.scale;
+            float y = this.startY
+                    + START_POS_Y_CHARACTER_BUTTON_GROUP * Settings.scale
+                    - row * CHARACTER_BUTTON_ROW_HEIGHT * Settings.scale
+                    + scrollY;
+            this.characters.get(i).update(x, y);
         }
     }
 
     private void updateDifficultyButtons() {
         for (int i = 0; i < this.difficulties.size(); i++) {
-            float x = this.screenX + i * 100.0F * Settings.scale + 130.0F * Settings.scale;
-            float y = this.startY + 550.0F * Settings.scale - yCharacterAdjust + scrollY;
+            float x = this.screenX
+                    + i * DIFFICULTY_BUTTON_WIDTH * Settings.scale
+                    + DIFFICULTY_BUTTON_PADDING * Settings.scale;
+            float y = this.startY
+                    + START_POS_Y_DIFFICULTY_BUTTON_GROUP * Settings.scale
+                    - yCharacterAdjust
+                    + scrollY;
             this.difficulties.get(i).update(x, y);
         }
     }
 
     private void updateChallenges() {
-        for (int i = 0; i < this.challenges.size(); i++) {
-            CustomMod chal = this.challenges.get(i);
-            if (chal.selected) {
-                this.confirmButton.show();
-                this.confirmButton.isDisabled = false;
+        // Show embark button if challenge is selected. Otherwise, hide embark button
+        boolean isChallengeSelected = false;
+        for (CustomMod c : this.challenges) {
+            if (c.selected) {
+                isChallengeSelected = true;
+                break;
             }
-            float height = (float) ReflectionHacks.getPrivate(chal, CustomMod.class, "height");
-            chal.update(startY + 225.0F * Settings.scale - yCharacterAdjust - height * i + scrollY);
+        }
+        if (isChallengeSelected) {
+            this.confirmButton.show();
+            this.confirmButton.isDisabled = false;
+        } else {
+            this.confirmButton.hide();
+            this.confirmButton.isDisabled = true;
+        }
+
+        // Update challenge groups
+        float yOffset = 0.0F;
+        for (ChallengeGroup cg : this.challengeGroups) {
+            float y = START_POS_Y_CHALLENGE_GROUP_START * Settings.scale - yOffset + scrollY;
+            cg.update(y);
+            yOffset += cg.size() + HEADER_PADDING_BOTTOM * Settings.scale;
         }
     }
 
@@ -179,7 +219,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
         this.confirmButton.update();
         if ((this.confirmButton.hb.clicked) || (CInputActionSet.proceed.isJustPressed())) {
             this.confirmButton.hb.clicked = false;
-            for (CustomModeCharacterButton ch : this.options) {
+            for (CustomModeCharacterButton ch : this.characters) {
                 if (ch.selected) {
                     CardCrawlGame.chosenCharacter = ch.c.chosenClass;
                 }
@@ -219,7 +259,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
                     break;
                 default:
                     String errorMsg = "Challenge the Spire difficulty does not exist";
-                    logger.error(errorMsg);
+                    ChallengeTheSpire.logger.error(errorMsg);
                     throw new RuntimeException(errorMsg);
             }
 
@@ -246,14 +286,14 @@ public class ChallengeModeScreen implements ScrollBarListener {
 
     public void render(SpriteBatch sb) {
         this.scrollBar.render(sb);
-        renderTitle(sb, uiStrings.TEXT[0], startY + 950.0F * Settings.scale + this.scrollY);
-        renderHeader(sb, uiStrings.TEXT[1], startY + 850.0F * Settings.scale + this.scrollY);
-        renderHeader(sb, uiStrings.TEXT[2], startY + 650.0F * Settings.scale - yCharacterAdjust + this.scrollY);
-        renderHeader(sb, uiStrings.TEXT[3], startY + 450.0F * Settings.scale - yCharacterAdjust + this.scrollY);
+        renderTitle(sb, uiStrings.TEXT[0], startY + START_POS_Y_TITLE * Settings.scale + this.scrollY);
+        renderHeader(sb, uiStrings.TEXT[1], startY + START_POS_Y_CHAR_HEADER * Settings.scale + this.scrollY);
+        renderHeader(sb, uiStrings.TEXT[2], startY + START_POS_Y_DIFFICULTY_HEADER * Settings.scale - yCharacterAdjust + this.scrollY);
+//        renderHeader(sb, uiStrings.TEXT[3], startY + START_POS_Y_CHALLENGE_GROUP_START * Settings.scale - yCharacterAdjust + this.scrollY);
         this.cancelButton.render(sb);
         this.confirmButton.render(sb);
 
-        for (CustomModeCharacterButton o : this.options) {
+        for (CustomModeCharacterButton o : this.characters) {
             o.render(sb);
         }
 
@@ -261,8 +301,8 @@ public class ChallengeModeScreen implements ScrollBarListener {
             b.render(sb);
         }
 
-        for (CustomMod c : this.challenges) {
-            c.render(sb);
+        for (ChallengeGroup cg : this.challengeGroups) {
+            cg.render(sb);
         }
     }
 
@@ -275,23 +315,22 @@ public class ChallengeModeScreen implements ScrollBarListener {
     }
 
     private void initializeCharacters() {
-        this.options.clear();
-        this.options.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.IRONCLAD), false));
-        this.options.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.THE_SILENT), UnlockTracker.isCharacterLocked("The Silent")));
-        this.options.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.DEFECT), UnlockTracker.isCharacterLocked("Defect")));
+        this.characters.clear();
+        this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.IRONCLAD), false));
+        this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.THE_SILENT), UnlockTracker.isCharacterLocked("The Silent")));
+        this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.DEFECT), UnlockTracker.isCharacterLocked("Defect")));
         for (AbstractPlayer character : getModdedCharacters()) {
-            options.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(character.chosenClass), false));
+            characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(character.chosenClass), false));
         }
 
-        int count = this.options.size();
+        int count = this.characters.size();
         for (int i = 0; i < count; i++) {
-            this.options.get(i).move(this.screenX + i * 100.0F * Settings.scale - 200.0F * Settings.scale, this.startY - 80.0F * Settings.scale);
+            this.characters.get(i).move(this.screenX + i * 100.0F * Settings.scale - 200.0F * Settings.scale, this.startY - 80.0F * Settings.scale);
         }
 
-        this.yCharacterAdjust = Math.floorDiv(this.options.size() - 1, MAX_CHAR_BUTTONS_PER_ROW) * 100.0F * Settings.scale;
-        logger.debug("yCharacterAdjust:\t" + yCharacterAdjust);
+        this.yCharacterAdjust = Math.floorDiv(this.characters.size() - 1, MAX_CHAR_BUTTONS_PER_ROW) * 100.0F * Settings.scale;
 
-        this.options.get(0).hb.clicked = true;
+        this.characters.get(0).hb.clicked = true;
     }
 
     private void initializeDifficulties() {
@@ -308,11 +347,21 @@ public class ChallengeModeScreen implements ScrollBarListener {
     }
 
     private void initializeChallenges() {
-        this.challenges.clear();
-        this.challenges.add(new CustomMod(ChallengeTheSpire.ELITE_RUSH_ID, "p", true));
-        this.challenges.add(new CustomMod(ChallengeTheSpire.BOSS_RUSH_ID, "p", true));
-        this.challenges.add(new CustomMod(ChallengeTheSpire.SNEAKY_STRIKE_ID, "p", true));
+        challengeGroups.clear();
 
+        // Add Challenge the Spire Challenges
+        ChallengeGroup cts_Challenges = new ChallengeGroup(uiStrings.TEXT[3], Arrays.asList(ChallengeTheSpire.ELITE_RUSH_ID, ChallengeTheSpire.BOSS_RUSH_ID, ChallengeTheSpire.SNEAKY_STRIKE_ID));
+        challengeGroups.add(cts_Challenges);
+
+        // Add challenges from other mods
+        for (String modName : ChallengeTheSpire.OtherModChallengemods.keySet()) {
+            challengeGroups.add(new ChallengeGroup(modName, ChallengeTheSpire.OtherModChallengemods.get(modName)));
+        }
+
+        // Set mutual exclusion so only one challenge can be selected at a time
+        for (ChallengeGroup cg : challengeGroups) {
+            this.challenges.addAll(cg.getCustomMods());
+        }
         for (CustomMod c : this.challenges) {
             List<CustomMod> rem = new ArrayList<>(this.challenges);
             rem.remove(c);
@@ -323,7 +372,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
     }
 
     public void deselectOtherOptions(CustomModeCharacterButton characterOption) {
-        for (CustomModeCharacterButton o : this.options) {
+        for (CustomModeCharacterButton o : this.characters) {
             if (o != characterOption) {
                 o.selected = false;
             }

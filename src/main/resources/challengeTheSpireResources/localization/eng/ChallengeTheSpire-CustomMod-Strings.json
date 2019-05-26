@@ -1,29 +1,29 @@
 {
-  "CTS - Elite Rush": {
+  "challengethespire:Elite Rush": {
     "NAME": "Elite Rush",
     "DESCRIPTION": "Only Elites in the spire today."
   },
-  "CTS - Boss Rush": {
+  "challengethespire:Boss Rush": {
     "NAME": "Boss Rush",
     "DESCRIPTION": "Only Bosses in the spire today."
   },
-  "CTS - Sneaky Strike": {
+  "challengethespire:Sneaky Strike": {
     "NAME": "Sneaky Strike",
     "DESCRIPTION": "Inspired by Twitch Chat. Sneaky Strikes added to your deck periodically."
   },
-  "CTS - Bronze Difficulty": {
+  "challengethespire:Bronze Difficulty": {
     "NAME": "Bronze",
     "DESCRIPTION": "A good place to get started with new challenges."
   },
-  "CTS - Silver Difficulty": {
+  "challengethespire:Silver Difficulty": {
     "NAME": "Silver",
     "DESCRIPTION": "Let's turn the heat up a little."
   },
-  "CTS - Gold Difficulty": {
+  "challengethespire:Gold Difficulty": {
     "NAME": "Gold",
     "DESCRIPTION": "Only for seasoned spire slayers."
   },
-  "CTS - Platinum Difficulty": {
+  "challengethespire:Platinum Difficulty": {
     "NAME": "Platinum",
     "DESCRIPTION": "Welcome to Die. NL Population: You."
   }

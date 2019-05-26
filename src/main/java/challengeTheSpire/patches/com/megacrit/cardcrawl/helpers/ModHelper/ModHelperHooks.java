@@ -7,6 +7,9 @@ import com.megacrit.cardcrawl.daily.mods.AbstractDailyMod;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.localization.RunModStrings;
 
+import java.util.Collection;
+import java.util.List;
+
 public class ModHelperHooks {
 
     @SpirePatch(clz = ModHelper.class, method = "initialize")
@@ -17,6 +20,11 @@ public class ModHelperHooks {
             }
             for (String mod : ChallengeTheSpire.CTSDifficultymods) {
                 initializeMod(mod);
+            }
+            for (List<String> challenges : ChallengeTheSpire.OtherModChallengemods.values()) {
+                for (String chal : challenges) {
+                    initializeMod(chal);
+                }
             }
         }
 

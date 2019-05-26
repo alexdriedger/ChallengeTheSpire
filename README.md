@@ -41,6 +41,10 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 - There will be a sneaky strike in every card reward screen
 - Sneaky Strikes are added to your deck at the middle treasure room and the campfire before the boss in every act
 
+### Challenge API (Crossover support)
+
+- Support for other mods to add challenges
+
 ### Custom Challenge Select Screen
 
 - Additional screen available in addition to Standard, Daily, Custom
@@ -74,7 +78,6 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 ### Polish Custom Challenge Select Screen
 
 - Record of highest difficulty achieved for each challenge for each character (including modded characters)
-- Hide embark button when unchecking currently checked challenge
 - Select Silent as character when selecting sneaky strike challenge
 
 ### Eggcellent

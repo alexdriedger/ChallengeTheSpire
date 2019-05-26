@@ -7,9 +7,13 @@ import challengeTheSpire.util.IDCheckDontTouchPls;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.Loader;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.green.SneakyStrike;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -28,10 +32,18 @@ import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 @SpireInitializer
 public class ChallengeTheSpire implements
@@ -49,26 +61,27 @@ public class ChallengeTheSpire implements
     private static final String AUTHOR = "alexdriedger"; // And pretty soon - You!
     private static final String DESCRIPTION = "Challenges for Slay The Spire";
 
-    public static final String ELITE_RUSH_ID = "CTS - Elite Rush";
+    public static final String ELITE_RUSH_ID = "challengethespire:Elite Rush";
     public static final int ELITE_RUSH_STARTING_GOLD = 1000;
     public static final int ELITE_RUSH_STARTING_GOLD_REDUCED = 750;
 
-    public static final String BOSS_RUSH_ID = "CTS - Boss Rush";
+    public static final String BOSS_RUSH_ID = "challengethespire:Boss Rush";
     public static final int BOSS_RUSH_STARTING_GOLD = 1000;
     public static final int BOSS_RUSH_STARTING_GOLD_REDUCED = 750;
 
-    public static final String SNEAKY_STRIKE_ID = "CTS - Sneaky Strike";
+    public static final String SNEAKY_STRIKE_ID = "challengethespire:Sneaky Strike";
 
-    public static final String BRONZE_DIFFICULTY_ID = "CTS - Bronze Difficulty";
-    public static final String SILVER_DIFFICULTY_ID = "CTS - Silver Difficulty";
-    public static final String GOLD_DIFFICULTY_ID = "CTS - Gold Difficulty";
-    public static final String PLATINUM_DIFFICULTY_ID = "CTS - Platinum Difficulty";
+    public static final String BRONZE_DIFFICULTY_ID = "challengethespire:Bronze Difficulty";
+    public static final String SILVER_DIFFICULTY_ID = "challengethespire:Silver Difficulty";
+    public static final String GOLD_DIFFICULTY_ID = "challengethespire:Gold Difficulty";
+    public static final String PLATINUM_DIFFICULTY_ID = "challengethespire:Platinum Difficulty";
 
-    public static final String CHALLENGE_MENU_PANEL_ID = "CTS - Challenge Panel";
-    public static final String CHALLENGE_MENU_SCREEN_ID = "CTS - Challenge Screen";
+    public static final String CHALLENGE_MENU_PANEL_ID = "challengethespire:Challenge Panel";
+    public static final String CHALLENGE_MENU_SCREEN_ID = "challengethespire:Challenge Screen";
 
     public static List<String> CTSChallengemods;
     public static List<String> CTSDifficultymods;
+    public static Map<String, List<String>> OtherModChallengemods;
     public static Map<String, AbstractDailyMod> moddedMods;
 
     private List<String> rushRelicsToRemove;
@@ -88,12 +101,13 @@ public class ChallengeTheSpire implements
         initializeRelicsToRemove();
 
         BaseMod.subscribe(this);
-        setModID("challengeTheSpire");
+        setModID("challengethespire");
     }
 
     private static void initializeCustomMods() {
         CTSChallengemods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID));
         CTSDifficultymods = new ArrayList<>(Arrays.asList(BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
+        OtherModChallengemods = new HashMap<>();
         moddedMods = new HashMap<>();
     }
 
@@ -258,14 +272,76 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receiveEditStrings() {
-        String path = getModID() + "Resources/localization/";
+        String path = getResourceDir() + "localization/";
+        String language;
         if (Settings.language.toString().equals("ZHS")) {
-            path += "zhs";
+            language = "zhs";
         } else {
             // Load English by default
-            path += "eng";
+            language = "eng";
         }
+        path += language;
         loadStringbyLanguage(path);
+
+        loadExternalChallenges(language);
+    }
+
+    private static void processExternalChallengeFile(String path, String modName) {
+        logger.info("Loading Challenge file:\t" + path);
+        BaseMod.loadCustomStringsFile(RunModStrings.class, path);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, RunModStrings>>(){}.getType();
+        try {
+            // Get challenge ids from file
+            Map<String, RunModStrings> challenges = gson.fromJson(loadJson(path), type);
+
+            // Store challenge ids for creating challenges in ChallengeModeScreen
+            List<String> challengesIDs = new ArrayList<>(challenges.keySet());
+            OtherModChallengemods.put(modName, challengesIDs);
+
+            logger.info("Loaded challenge file successfully:\t" + path);
+        } catch (JsonParseException e) {
+            logger.error("Could not load challenges file (incorrect challenge file format):\t" + path);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Get mods running
+     * @return Map of Mod Name to URL for the mod jar
+     */
+    private static Map<String, URL> getRunningModsPathMTS() {
+        Map<String, URL> map = new HashMap<>();
+        ModInfo[] modInfos = Loader.MODINFOS;
+        for (ModInfo m : modInfos) {
+            map.put(m.Name, m.jarURL);
+        }
+
+        return map;
+    }
+
+    private static void loadExternalChallenges(String language) {
+
+        Map<String, URL> mods = getRunningModsPathMTS();
+
+        for (String modName : mods.keySet()) {
+            try {
+                URL jarURL = mods.get(modName);
+                JarFile jarFile = new JarFile(Paths.get(jarURL.toURI()).toFile());
+                jarFile.stream()
+                        // Map jar entry to file path
+                        .map(ZipEntry::getName)
+                        .filter(filePath -> filePath.contains("localization") && filePath.contains(language) && filePath.endsWith("Challenges.json"))
+                        .forEach(path -> ChallengeTheSpire.processExternalChallengeFile(path, modName));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static String loadJson(String jsonPath) {
+        return Gdx.files.internal(jsonPath).readString(String.valueOf(StandardCharsets.UTF_8));
     }
 
     private static void loadStringbyLanguage(String path) {
@@ -386,6 +462,10 @@ public class ChallengeTheSpire implements
     }
 
     public static String getImagePath(String path) {
-        return getModID() + "Resources/images/" + path;
+        return getResourceDir() + "images/" + path;
+    }
+
+    public static String getResourceDir() {
+        return "challengeTheSpireResources/";
     }
 }
