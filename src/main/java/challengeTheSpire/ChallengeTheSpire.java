@@ -298,7 +298,11 @@ public class ChallengeTheSpire implements
 
             // Store challenge ids for creating challenges in ChallengeModeScreen
             List<String> challengesIDs = new ArrayList<>(challenges.keySet());
-            OtherModChallengemods.put(modName, challengesIDs);
+            if (OtherModChallengemods.containsKey(modName)) {
+                OtherModChallengemods.get(modName).addAll(challengesIDs);
+            } else {
+                OtherModChallengemods.put(modName, challengesIDs);
+            }
 
             logger.info("Loaded challenge file successfully:\t" + path);
         } catch (JsonParseException e) {
