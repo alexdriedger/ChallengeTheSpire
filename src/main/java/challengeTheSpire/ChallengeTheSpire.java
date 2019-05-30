@@ -42,6 +42,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
@@ -333,10 +334,11 @@ public class ChallengeTheSpire implements
             try {
                 URL jarURL = mods.get(modName);
                 JarFile jarFile = new JarFile(Paths.get(jarURL.toURI()).toFile());
+                Pattern fileRegex = Pattern.compile(".*/localization/.*" + language + "/.*Challenges.json");
                 jarFile.stream()
                         // Map jar entry to file path
                         .map(ZipEntry::getName)
-                        .filter(filePath -> filePath.contains("localization") && filePath.contains(language) && filePath.endsWith("Challenges.json"))
+                        .filter(filePath -> fileRegex.matcher(filePath).matches())
                         .forEach(path -> ChallengeTheSpire.processExternalChallengeFile(path, modName));
             } catch (Exception e) {
                 e.printStackTrace();
