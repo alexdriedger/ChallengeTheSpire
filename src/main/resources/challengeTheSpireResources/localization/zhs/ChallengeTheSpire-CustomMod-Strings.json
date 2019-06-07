@@ -1,30 +1,30 @@
 {
   "challengethespire:Elite Rush": {
-    "NAME": "Elite_Rush",
-    "DESCRIPTION": "今天高塔里面只有精英。"
+    "NAME": "精英Rush",
+    "DESCRIPTION": "高塔中只会出现精英敌人。"
   },
   "challengethespire:Boss Rush": {
-    "NAME": "Boss_Rush",
-    "DESCRIPTION": "今天高塔里面只有BOSS。"
+    "NAME": "Boss Rush",
+    "DESCRIPTION": "高塔中只会出现Boss。"
   },
   "challengethespire:Sneaky Strike": {
     "NAME": "隐秘打击",
-    "DESCRIPTION": "直播聊天时候得到的灵感。 隐秘打击将会周期性地加入你的牌库。"
+    "DESCRIPTION": "灵感来自Twitch聊天室。定期向你的牌组中加入隐秘打击。"
   },
   "challengethespire:Bronze Difficulty": {
-    "NAME": "铜",
-    "DESCRIPTION": "一个尝试新的挑战的好选择。"
+    "NAME": "青铜",
+    "DESCRIPTION": "很适合作为尝试新挑战的开始。"
   },
   "challengethespire:Silver Difficulty": {
-    "NAME": "银",
-    "DESCRIPTION": "让暴风雨来的更猛烈些吧！"
+    "NAME": "白银",
+    "DESCRIPTION": "让挑战更为白热化一些。"
   },
   "challengethespire:Gold Difficulty": {
-    "NAME": "金",
-    "DESCRIPTION": "只面向于经验丰富的高塔老手的难度。"
+    "NAME": "黄金",
+    "DESCRIPTION": "专为老练的爬塔玩家准备。"
   },
   "challengethespire:Platinum Difficulty": {
     "NAME": "白金",
-    "DESCRIPTION": "笑对死亡。 NL 人口：你。"
+    "DESCRIPTION": "欢迎来到屠杀场。 NL 人口总数：就是你。"
   }
 }
