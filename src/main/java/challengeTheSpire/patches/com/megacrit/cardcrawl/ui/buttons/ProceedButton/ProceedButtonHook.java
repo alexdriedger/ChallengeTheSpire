@@ -51,7 +51,7 @@ public class ProceedButtonHook {
     @SpirePatch(clz = ProceedButton.class, method = "update")
     public static class goToNextRoom {
 
-        @SpireInsertPatch(rloc = 111)
+        @SpireInsertPatch(rloc = 121)
         public static SpireReturn Insert(ProceedButton __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
                     ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
