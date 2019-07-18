@@ -4,16 +4,16 @@
     "DESCRIPTION": "高塔中只会出现精英敌人。"
   },
   "challengethespire:Modded Elite Rush": {
-    "NAME": "Modded Elite Rush",
-    "DESCRIPTION": "Modded Elites in the spire today."
+    "NAME": "模组精英Rush",
+    "DESCRIPTION": "高塔中只会出现自定义精英敌人。"
   },
   "challengethespire:Boss Rush": {
     "NAME": "Boss Rush",
     "DESCRIPTION": "高塔中只会出现Boss。"
   },
   "challengethespire:Modded Boss Rush": {
-    "NAME": "Modded Boss Rush",
-    "DESCRIPTION": "Modded Bosses in the spire today."
+    "NAME": "模组BossRush",
+    "DESCRIPTION": "高塔中只会出现自定义Boss。"
   },
   "challengethespire:Sneaky Strike": {
     "NAME": "隐秘打击",

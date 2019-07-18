@@ -76,7 +76,6 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 - Remove Certain Future mod and patch Replay The Spire instead
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
-- ZHS translation for Modded Elite / Boss Rush
 
 ### Polish Sneaky Strike
 
