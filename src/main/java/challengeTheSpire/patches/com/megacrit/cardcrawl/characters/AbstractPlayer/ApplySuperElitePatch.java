@@ -11,7 +11,7 @@ public class ApplySuperElitePatch {
 
     @SpireInsertPatch(rloc = 52)
     public static void Insert(AbstractPlayer __instance) {
-        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) || ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID)) {
             AbstractDungeon.getCurrRoom().applyEmeraldEliteBuff();
         }
     }

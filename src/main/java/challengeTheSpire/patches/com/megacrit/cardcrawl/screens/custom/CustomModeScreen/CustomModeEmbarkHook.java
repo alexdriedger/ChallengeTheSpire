@@ -29,7 +29,10 @@ public class CustomModeEmbarkHook {
     public static void addCertainFuture(CustomTrial trial) {
         if ((!trial.dailyModIDs().contains(CertainFuture.ID)) &&
                 (trial.dailyModIDs().contains(ChallengeTheSpire.BOSS_RUSH_ID) ||
-                        trial.dailyModIDs().contains(ChallengeTheSpire.ELITE_RUSH_ID))) {
+                        trial.dailyModIDs().contains(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                        trial.dailyModIDs().contains(ChallengeTheSpire.MODDED_BOSS_RUSH_ID) ||
+                        trial.dailyModIDs().contains(ChallengeTheSpire.MODDED_ELITE_RUSH_ID))
+                ) {
             logger.debug("Setting Certain Future mod to avoid crash with Replay The Spire");
             trial.addDailyMod(CertainFuture.ID);
         }

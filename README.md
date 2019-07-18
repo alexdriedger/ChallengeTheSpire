@@ -32,6 +32,14 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
   - Silver =  Ascension 9
   - Gold = Ascension 14 & one elite of each “act” a super elite & less starting gold (1000 -> 750)
   - Platinum = Ascension 20 & all super elites
+
+### Modded Elite Rush
+
+- Elite Rush with modded elites
+
+### Modded Boss Rush
+
+- Boss Rush with modded bosses
   
 ### Sneaky Strike
 
@@ -68,6 +76,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 - Remove Certain Future mod and patch Replay The Spire instead
 - Remove unnecessary scores bonuses
 - Victory message surrounding what type of challenge was completed
+- ZHS translation for Modded Elite / Boss Rush
 
 ### Polish Sneaky Strike
 
@@ -79,6 +88,7 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 
 - Record of highest difficulty achieved for each challenge for each character (including modded characters)
 - Select Silent as character when selecting sneaky strike challenge
+- Allow multiple challenges to be selected for Challenge API with `compatibleWith` list in json files
 
 ### Eggcellent
 

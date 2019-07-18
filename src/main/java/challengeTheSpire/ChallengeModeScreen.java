@@ -350,7 +350,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
         challengeGroups.clear();
 
         // Add Challenge the Spire Challenges
-        ChallengeGroup cts_Challenges = new ChallengeGroup(uiStrings.TEXT[3], Arrays.asList(ChallengeTheSpire.ELITE_RUSH_ID, ChallengeTheSpire.BOSS_RUSH_ID, ChallengeTheSpire.SNEAKY_STRIKE_ID));
+        ChallengeGroup cts_Challenges = new ChallengeGroup(uiStrings.TEXT[3], Arrays.asList(ChallengeTheSpire.ELITE_RUSH_ID, ChallengeTheSpire.MODDED_ELITE_RUSH_ID, ChallengeTheSpire.BOSS_RUSH_ID, ChallengeTheSpire.MODDED_BOSS_RUSH_ID, ChallengeTheSpire.SNEAKY_STRIKE_ID));
         challengeGroups.add(cts_Challenges);
 
         // Add challenges from other mods

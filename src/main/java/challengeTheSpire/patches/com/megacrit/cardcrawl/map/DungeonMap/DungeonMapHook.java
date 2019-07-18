@@ -13,7 +13,9 @@ public class DungeonMapHook {
     public static class stopBossIconRender {
         public static SpireReturn Prefix() {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -24,7 +26,9 @@ public class DungeonMapHook {
     public static class minimizeBossHitbox {
         public static void Postfix(DungeonMap __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 __instance.bossHb = new Hitbox(0, 0);
             }
         }
@@ -38,7 +42,9 @@ public class DungeonMapHook {
         @SpireInsertPatch(rloc = 12)
         public static SpireReturn Insert(DungeonMap __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();

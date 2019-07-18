@@ -13,7 +13,7 @@ public class MakePantographBossRelic {
 
     @SpireInsertPatch(rloc = 91)
     public static void Insert(AbstractDungeon __instance) {
-        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+        if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) || ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
             // Pantograph should have already been removed from the uncommon relic pool
             AbstractDungeon.bossRelicPool.add(Pantograph.ID);
             Collections.shuffle(AbstractDungeon.bossRelicPool, new java.util.Random(AbstractDungeon.relicRng.randomLong()));

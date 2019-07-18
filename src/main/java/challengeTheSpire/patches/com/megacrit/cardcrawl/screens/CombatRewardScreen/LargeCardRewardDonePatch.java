@@ -29,7 +29,9 @@ public class LargeCardRewardDonePatch {
         @SpireInsertPatch(rloc = 33)
         public static void Insert(CombatRewardScreen __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 if (AbstractDungeon.getCurrRoom() instanceof MonsterRoomEliteHunting ||
                         AbstractDungeon.getCurrRoom() instanceof MonsterRoomBossRush) {
                     __instance.rewards.removeIf(r -> r.type == RewardItem.RewardType.CARD);

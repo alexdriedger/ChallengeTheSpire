@@ -3,9 +3,17 @@
     "NAME": "Elite Rush",
     "DESCRIPTION": "Only Elites in the spire today."
   },
+  "challengethespire:Modded Elite Rush": {
+    "NAME": "Modded Elite Rush",
+    "DESCRIPTION": "Modded Elites in the spire today."
+  },
   "challengethespire:Boss Rush": {
     "NAME": "Boss Rush",
     "DESCRIPTION": "Only Bosses in the spire today."
+  },
+  "challengethespire:Modded Boss Rush": {
+    "NAME": "Modded Boss Rush",
+    "DESCRIPTION": "Modded Bosses in the spire today."
   },
   "challengethespire:Sneaky Strike": {
     "NAME": "Sneaky Strike",

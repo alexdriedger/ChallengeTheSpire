@@ -45,7 +45,7 @@ public class LargeCardReward extends CustomReward {
 
     public LargeCardReward(String challengeMode, String difficulty) {
         super(ICON, TEXT, RushCardRewardEnum.CTS_LARGE_CARD_REWARD);
-        if (challengeMode.equals(ChallengeTheSpire.BOSS_RUSH_ID)) {
+        if (challengeMode.equals(ChallengeTheSpire.BOSS_RUSH_ID) || challengeMode.equals(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
             switch (difficulty) {
                 case ChallengeTheSpire.BRONZE_DIFFICULTY_ID:
                     this.numCards = 20;
@@ -63,7 +63,7 @@ public class LargeCardReward extends CustomReward {
                     ChallengeTheSpire.logger.error("Unknown difficulty being played in Boss Rush");
             }
         }
-        else if (challengeMode.equals(ChallengeTheSpire.ELITE_RUSH_ID)) {
+        else if (challengeMode.equals(ChallengeTheSpire.ELITE_RUSH_ID) || challengeMode.equals(ChallengeTheSpire.MODDED_ELITE_RUSH_ID)) {
             switch (difficulty) {
                 case ChallengeTheSpire.BRONZE_DIFFICULTY_ID:
                     this.numCards = 15;

@@ -3,6 +3,7 @@ package challengeTheSpire;
 import basemod.BaseMod;
 import basemod.ModPanel;
 import basemod.interfaces.*;
+import challengeTheSpire.patches.com.megacrit.cardcrawl.dungeons.AbstractDungeon.GenerateMapHook;
 import challengeTheSpire.util.IDCheckDontTouchPls;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -20,7 +21,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.AbstractDailyMod;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.dungeons.*;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
@@ -70,6 +71,8 @@ public class ChallengeTheSpire implements
     public static final int BOSS_RUSH_STARTING_GOLD = 1000;
     public static final int BOSS_RUSH_STARTING_GOLD_REDUCED = 750;
 
+    public static final String MODDED_ELITE_RUSH_ID = "challengethespire:Modded Elite Rush";
+    public static final String MODDED_BOSS_RUSH_ID = "challengethespire:Modded Boss Rush";
     public static final String SNEAKY_STRIKE_ID = "challengethespire:Sneaky Strike";
 
     public static final String BRONZE_DIFFICULTY_ID = "challengethespire:Bronze Difficulty";
@@ -96,17 +99,21 @@ public class ChallengeTheSpire implements
     private List<String> jediRushRelicsToRemove;
     private List<String> vexRushRelicsToRemove;
 
+    public static Map<String, List<String>> eliteIDs;
+    public static Map<String, List<String>> bossIDs;
+
     public ChallengeTheSpire() {
         logger.info("Subscribe to BaseMod hooks");
         initializeCustomMods();
         initializeRelicsToRemove();
+        initializeMonsterIDs();
 
         BaseMod.subscribe(this);
         setModID("challengethespire");
     }
 
     private static void initializeCustomMods() {
-        CTSChallengemods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, BOSS_RUSH_ID, SNEAKY_STRIKE_ID));
+        CTSChallengemods = new ArrayList<>(Arrays.asList(ELITE_RUSH_ID, MODDED_ELITE_RUSH_ID, BOSS_RUSH_ID, MODDED_BOSS_RUSH_ID, SNEAKY_STRIKE_ID));
         CTSDifficultymods = new ArrayList<>(Arrays.asList(BRONZE_DIFFICULTY_ID, SILVER_DIFFICULTY_ID, GOLD_DIFFICULTY_ID, PLATINUM_DIFFICULTY_ID));
         OtherModChallengemods = new HashMap<>();
         moddedMods = new HashMap<>();
@@ -214,6 +221,20 @@ public class ChallengeTheSpire implements
         ));
     }
 
+    private void initializeMonsterIDs() {
+        eliteIDs = new HashMap<>();
+        eliteIDs.put(Exordium.ID, Arrays.asList("Gremlin Nob", "Lagavulin", "3 Sentries"));
+        eliteIDs.put(TheCity.ID, Arrays.asList("Gremlin Leader", "Slavers", "Book of Stabbing"));
+        eliteIDs.put(TheBeyond.ID, Arrays.asList("Giant Head", "Nemesis", "Reptomancer"));
+        eliteIDs.put(TheEnding.ID, Arrays.asList("Shield and Spear"));
+
+        bossIDs = new HashMap<>();
+        bossIDs.put(Exordium.ID, Arrays.asList("The Guardian", "Hexaghost", "Slime Boss"));
+        bossIDs.put(TheCity.ID, Arrays.asList("Automaton", "Collector", "Champ"));
+        bossIDs.put(TheBeyond.ID, Arrays.asList("Awakened One", "Time Eater", "Donu and Deca"));
+        bossIDs.put(TheEnding.ID, Arrays.asList("The Heart"));
+    }
+
     public static void setModID(String ID) { // DON'T EDIT
         Gson coolG = new Gson(); // EY DON'T EDIT THIS
         //   String IDjson = Gdx.files.internal("IDCheckStrings.json").readString(String.valueOf(StandardCharsets.UTF_8)); // i hate u Gdx.files
@@ -264,11 +285,25 @@ public class ChallengeTheSpire implements
     @Override
     public void receiveCustomModeMods(List<CustomMod> list) {
         CustomMod eliteRush = new CustomMod(ELITE_RUSH_ID, "p", true);
+        CustomMod moddedEliteRush = new CustomMod(MODDED_ELITE_RUSH_ID, "p", true);
         CustomMod bossRush = new CustomMod(BOSS_RUSH_ID, "p", true);
+        CustomMod moddedBossRush = new CustomMod(MODDED_BOSS_RUSH_ID, "p", true);
         CustomMod sneakyStrike = new CustomMod(SNEAKY_STRIKE_ID, "p", true);
+        CustomMod bronze = new CustomMod(BRONZE_DIFFICULTY_ID, "p", true);
+        CustomMod silver = new CustomMod(SILVER_DIFFICULTY_ID, "p", true);
+        CustomMod gold = new CustomMod(GOLD_DIFFICULTY_ID, "p", true);
+        CustomMod platinum = new CustomMod(PLATINUM_DIFFICULTY_ID, "p", true);
+
         list.add(eliteRush);
+        list.add(moddedEliteRush);
         list.add(bossRush);
+        list.add(moddedBossRush);
         list.add(sneakyStrike);
+        list.add(bronze);
+        list.add(silver);
+        list.add(gold);
+        list.add(platinum);
+
     }
 
     @Override
@@ -359,7 +394,7 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receivePostCreateStartingRelics(AbstractPlayer.PlayerClass playerClass, ArrayList<String> relics) {
-        if (isCustomModActive(ELITE_RUSH_ID)) {
+        if (isCustomModActive(ELITE_RUSH_ID) || isCustomModActive(MODDED_ELITE_RUSH_ID)) {
             relics.add(BlackStar.ID);
             relics.add(Sling.ID);
             relics.add(PreservedInsect.ID);
@@ -367,7 +402,7 @@ public class ChallengeTheSpire implements
             AbstractDungeon.relicsToRemoveOnStart.addAll(eliteRushRelicsToRemove);
         }
 
-        if (isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+        if (isCustomModActive(BOSS_RUSH_ID) || isCustomModActive(MODDED_BOSS_RUSH_ID)) {
             relics.add(Courier.ID);
             relics.add(MoltenEgg2.ID);
             relics.add(ToxicEgg2.ID);
@@ -376,7 +411,8 @@ public class ChallengeTheSpire implements
             AbstractDungeon.relicsToRemoveOnStart.addAll(bossRushRelicsToRemove);
         }
 
-        if (isCustomModActive(ELITE_RUSH_ID) || isCustomModActive(BOSS_RUSH_ID)) {
+        if (isCustomModActive(ELITE_RUSH_ID) || isCustomModActive(BOSS_RUSH_ID)
+                || isCustomModActive(MODDED_ELITE_RUSH_ID) || isCustomModActive(MODDED_BOSS_RUSH_ID)) {
             AbstractDungeon.relicsToRemoveOnStart.addAll(rushRelicsToRemove);
 
             removeModRelicsIfLoaded("ReplayTheSpireMod", replayRushRelicsToRemove);
@@ -398,7 +434,7 @@ public class ChallengeTheSpire implements
 
     @Override
     public void receivePostDungeonInitialize() {
-        if (isCustomModActive(ELITE_RUSH_ID)) {
+        if (isCustomModActive(ELITE_RUSH_ID) || isCustomModActive(MODDED_ELITE_RUSH_ID)) {
             if (isCustomModActive(GOLD_DIFFICULTY_ID) || isCustomModActive(PLATINUM_DIFFICULTY_ID)) {
                 AbstractDungeon.player.gold = ELITE_RUSH_STARTING_GOLD_REDUCED;
                 AbstractDungeon.player.displayGold = ELITE_RUSH_STARTING_GOLD_REDUCED;
@@ -408,7 +444,7 @@ public class ChallengeTheSpire implements
             }
         }
 
-        if (isCustomModActive(BOSS_RUSH_ID)) {
+        if (isCustomModActive(BOSS_RUSH_ID) || isCustomModActive(MODDED_BOSS_RUSH_ID)) {
             if (isCustomModActive(GOLD_DIFFICULTY_ID) || isCustomModActive(PLATINUM_DIFFICULTY_ID)) {
                 AbstractDungeon.player.gold = BOSS_RUSH_STARTING_GOLD_REDUCED;
                 AbstractDungeon.player.displayGold = BOSS_RUSH_STARTING_GOLD_REDUCED;

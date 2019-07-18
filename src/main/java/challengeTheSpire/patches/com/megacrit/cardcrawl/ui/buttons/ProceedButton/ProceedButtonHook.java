@@ -26,7 +26,9 @@ public class ProceedButtonHook {
         @SpireInsertPatch(rloc = 25)
         public static void Insert(ProceedButton __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 AbstractRoom currentRoom = AbstractDungeon.getCurrRoom();
                 if ((currentRoom instanceof MonsterRoomEliteHunting || currentRoom instanceof MonsterRoomBossRush) &&
                         AbstractDungeon.getCurrMapNode().y == AbstractDungeon.map.size() - 2) {
@@ -54,7 +56,9 @@ public class ProceedButtonHook {
         @SpireInsertPatch(rloc = 121)
         public static SpireReturn Insert(ProceedButton __instance) {
             if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
                 AbstractDungeon.dungeonMapScreen.open(false);
                 __instance.hide();
                 return SpireReturn.Return(null);

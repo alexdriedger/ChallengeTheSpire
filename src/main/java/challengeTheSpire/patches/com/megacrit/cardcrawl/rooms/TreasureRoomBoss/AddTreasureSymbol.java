@@ -10,7 +10,9 @@ public class AddTreasureSymbol {
 
     public static void Postfix(TreasureRoomBoss __instance) {
         if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
-                ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID)) {
+                ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.BOSS_RUSH_ID) ||
+                ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID) ||
+                ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_BOSS_RUSH_ID)) {
             __instance.setMapSymbol("T");
 
             // TODO : CHANGE TO INSTRUMENT PATCH TO DELETE THE LINE THAT CHANGES THIS

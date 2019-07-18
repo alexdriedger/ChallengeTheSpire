@@ -22,7 +22,9 @@ public class SuperEliteMapPatch {
 
         @SpireInsertPatch(rloc = 33)
         public static void Insert(MapRoomNode __instance) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) && __instance.hasEmeraldKey) {
+            if ((ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) ||
+                    ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID))
+                    && __instance.hasEmeraldKey) {
                 updateEmerald(__instance);
             }
         }
@@ -57,7 +59,9 @@ public class SuperEliteMapPatch {
     public static class renderPatch {
         @SpireInsertPatch(rloc = 6)
         public static void Insert(MapRoomNode __instance, SpriteBatch sb) {
-            if (ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID) && __instance.hasEmeraldKey) {
+            if ((ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.ELITE_RUSH_ID)
+                || ChallengeTheSpire.isCustomModActive(ChallengeTheSpire.MODDED_ELITE_RUSH_ID))
+                    && __instance.hasEmeraldKey) {
                 renderEmeraldVfx(__instance, sb);
             }
         }
