@@ -209,7 +209,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
         // Update challenge groups
         float yOffset = 0.0F;
         for (ChallengeGroup cg : this.challengeGroups) {
-            float y = START_POS_Y_CHALLENGE_GROUP_START * Settings.scale - yOffset + scrollY;
+            float y = START_POS_Y_CHALLENGE_GROUP_START * Settings.scale - yOffset + scrollY - yCharacterAdjust;
             cg.update(y);
             yOffset += cg.size() + HEADER_PADDING_BOTTOM * Settings.scale;
         }
