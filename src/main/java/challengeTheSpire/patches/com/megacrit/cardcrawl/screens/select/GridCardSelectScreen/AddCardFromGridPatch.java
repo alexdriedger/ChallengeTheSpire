@@ -12,7 +12,7 @@ public class AddCardFromGridPatch {
     @SpirePatch(clz = GridCardSelectScreen.class, method = "update")
     public static class updatePatch {
 
-        @SpireInsertPatch(rloc = 61)
+        @SpireInsertPatch(rloc = 75)
         public static void Insert(GridCardSelectScreen __instance) {
             if (GridCardSelectScreenFields.forCardReward.get(__instance)) {
                 AbstractCard c = __instance.selectedCards.get(0);

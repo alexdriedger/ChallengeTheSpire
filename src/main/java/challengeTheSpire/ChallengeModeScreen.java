@@ -311,7 +311,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
     }
 
     private void renderHeader(SpriteBatch sb, String text, float y) {
-        FontHelper.renderSmartText(sb, FontHelper.deckBannerFont, text, this.screenX + 50.0F * Settings.scale, y, 9999.0F, 32.0F * Settings.scale, Settings.GOLD_COLOR);
+        FontHelper.renderSmartText(sb, FontHelper.panelNameFont, text, this.screenX + 50.0F * Settings.scale, y, 9999.0F, 32.0F * Settings.scale, Settings.GOLD_COLOR);
     }
 
     private void initializeCharacters() {

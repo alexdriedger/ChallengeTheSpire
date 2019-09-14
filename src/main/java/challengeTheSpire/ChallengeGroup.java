@@ -64,7 +64,7 @@ public class ChallengeGroup {
 
     public void render(SpriteBatch sb) {
         // Render header
-        FontHelper.renderSmartText(sb, FontHelper.deckBannerFont, this.header, 350.0F * Settings.scale, this.y, 9999.0F, 32.0F * Settings.scale, Settings.GOLD_COLOR);
+        FontHelper.renderSmartText(sb, FontHelper.panelNameFont, this.header, 350.0F * Settings.scale, this.y, 9999.0F, 32.0F * Settings.scale, Settings.GOLD_COLOR);
 
         for (CustomMod c : this.customMods) {
             c.render(sb);
