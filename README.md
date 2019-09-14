@@ -2,7 +2,13 @@
 
 Boss Rush, Elite Rush, & More!! Available on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1696570507)!
 
+Challenge the Spire was featured by Rhapsody on 💻 **YouTube** 💻 (with almost 10K views!). Check out his Let's Play of Challenge the Spire [here](https://www.youtube.com/watch?v=KXce03mTjwg&t=18s) 🚀
+
 Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each challenge can be played on 4 different difficulty settings (Bronze, Silver, Gold, Platinum).
+
+![Challenge the Spire Main Menu](https://raw.githubusercontent.com/alexdriedger/ChallengeTheSpire/master/workshopImages/Main%20Menu%20Panel.PNG)
+
+![Challenge the Spire Challenges](https://raw.githubusercontent.com/alexdriedger/ChallengeTheSpire/master/workshopImages/Challenge%20Mode%20Run%20Selection%201.4.2.png)
 
 ## Requirements
 
@@ -21,6 +27,8 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
   - Silver = Ascension  9
   - Gold = Ascension  14 & less starting gold (1000 -> 750)
   - Platinum = Ascension  20
+  
+![Rush Map](https://raw.githubusercontent.com/alexdriedger/ChallengeTheSpire/master/workshopImages/Elite%20Rush%20Map%201.4.2.png)
 
 ### Elite Rush
 
@@ -48,6 +56,8 @@ Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each ch
 - Beat the run with as many sneaky strikes in the deck as possible
 - There will be a sneaky strike in every card reward screen
 - Sneaky Strikes are added to your deck at the middle treasure room and the campfire before the boss in every act
+
+![Sneaky Strike Card Choice](https://raw.githubusercontent.com/alexdriedger/ChallengeTheSpire/master/workshopImages/Sneaky%20Strike%20Card%20Choice.PNG)
 
 ### Challenge API (Crossover support)
 
