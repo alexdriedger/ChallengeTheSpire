@@ -2,7 +2,7 @@
 
 Boss Rush, Elite Rush, & More!! Available on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1696570507)!
 
-Challenge the Spire was featured by Rhapsody on 💻 **YouTube** 💻 (with almost 10K views!). Check out his Let's Play of Challenge the Spire [here](https://www.youtube.com/watch?v=KXce03mTjwg&t=18s) 🚀
+Challenge the Spire was featured by Rhapsody on 💻 **YouTube** 💻 (with almost 10K views!). Check out his Let's Play of Challenge the Spire [here](https://www.youtube.com/watch?v=KXce03mTjwg&t) 🚀
 
 Challenge The Spire adds a variety of challenge modes to Slay The Spire. Each challenge can be played on 4 different difficulty settings (Bronze, Silver, Gold, Platinum).
 
