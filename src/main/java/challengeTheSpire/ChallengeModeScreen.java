@@ -319,6 +319,7 @@ public class ChallengeModeScreen implements ScrollBarListener {
         this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.IRONCLAD), false));
         this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.THE_SILENT), UnlockTracker.isCharacterLocked("The Silent")));
         this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.DEFECT), UnlockTracker.isCharacterLocked("Defect")));
+        this.characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(AbstractPlayer.PlayerClass.WATCHER), UnlockTracker.isCharacterLocked("Watcher")));
         for (AbstractPlayer character : getModdedCharacters()) {
             characters.add(new ChallengeModeCharacterButton(CardCrawlGame.characterManager.setChosenCharacter(character.chosenClass), false));
         }
